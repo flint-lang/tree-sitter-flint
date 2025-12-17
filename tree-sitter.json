@@ -1,0 +1,43 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "flint",
+      "camelcase": "Flint",
+      "title": "Flint",
+      "scope": "source.flint",
+      "file-types": [
+        "ft",
+        "flint"
+      ],
+      "injection-regex": "^flint$",
+      "class-name": "TreeSitterFlint"
+    }
+  ],
+  "metadata": {
+    "version": "0.0.1",
+    "license": "Apache-2.0",
+    "description": "Tree Sitter grammar for the Flint programming language",
+    "authors": [
+      {
+        "name": "Julius Grünberg",
+        "email": "ghastcrafthd@troense.de",
+        "url": "https://github.com/ghastcrafthd"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/flint-lang/tree-sitter-flint",
+      "funding": ""
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
