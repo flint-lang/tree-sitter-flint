@@ -11,22 +11,64 @@ export default grammar({
   name: "flint",
 
   rules: {
-    // 1. Remove fragments (alpha/digit) from top-level choice to avoid conflicts
-    source_file: ($) => repeat(choice($.number, $.string, $.identifier)),
-
-    // 2. Wrap lexical rules in token() so they are treated as single atoms
-    //    This prevents "123" from being parsed as [digit, digit, digit]
-    number: ($) =>
-      token(
-        seq(
-          /[0-9]+/, // One or more digits
-          optional(seq(".", /[0-9]+/)), // Optional decimals
-        ),
+    _reserved_identifier: (_) =>
+      choice(
+        "def",
+        "data",
+        "func",
+        "entity",
+        "enum",
+        "variant",
+        "error",
+        "test",
+        "extern",
+        "export",
       ),
 
-    string: ($) => token(seq('"', repeat(/[^"]/), '"')),
+    // Definition of the number literal rule
+    // Contains rules for integer and floating point number literals
+    number_literal: (_) => {
+      const sign = /[-\+]/;
+      const seperator = "_";
+      const decimal = /[0-9]/;
+      const firstDecimal = /[0-9]/;
+      const intDecimalDigits = seq(
+        firstDecimal,
+        repeat(decimal),
+        repeat(seq(seperator, repeat1(decimal))),
+      );
+      const floatDecimalDigits = seq(
+        repeat1(decimal),
+        repeat(seq(seperator, repeat1(decimal))),
+      );
 
-    // 3. Identifiers start with alpha, followed by alphanumeric
-    identifier: ($) => token(seq(/[a-zA-Z_]/, repeat(/[a-zA-Z0-9_]/))),
+      return token(
+        seq(
+          optional(sign), // + or - in front of the number
+          choice(
+            seq(
+              choice(intDecimalDigits), // integer definition
+              // optional int suffixes can be defined here
+            ),
+            seq(
+              choice(
+                seq(floatDecimalDigits, ".", optional(floatDecimalDigits)), // float definition like 3.5
+                seq(".", floatDecimalDigits), // float denifition like .5
+              ),
+              // optional float suffixes can be added here
+            ),
+          ),
+        ),
+      );
+    },
+
+    // Definition of comments in flint
+    comment: (_) =>
+      token(
+        choice(
+          seq("//", /[^\n\r]*/), // single line comments
+          seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"), // multiline comments
+        ),
+      ),
   },
 });
