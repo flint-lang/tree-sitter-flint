@@ -31,6 +31,7 @@ const PREC = {
   POW: 8,
   MOD: 8,
   DEFAULT_OP: 9,
+  UNARY: 10,
 };
 
 export default grammar({
@@ -40,6 +41,18 @@ export default grammar({
   // Extras
   // =================================================================
   extras: ($) => [/\s/, $.line_comment, $.block_comment],
+
+  // =================================================================
+  // Supertypes
+  // =================================================================
+  supertypes: ($) => [$.expression],
+
+  // =================================================================
+  // Inline
+  // =================================================================
+  inline: ($) => [$._name],
+
+  word: ($) => $.identifier,
 
   rules: {
     // =================================================================
@@ -128,7 +141,151 @@ export default grammar({
     // Expressions
     // =================================================================
 
-    expression: ($) => choice(),
+    expression: ($) => choice($.assignment_expression, $.binary_expression),
+
+    assignment_expression: ($) =>
+      prec.right(
+        PREC.ASSIGN,
+        seq(
+          field(
+            "left",
+            choice(
+              $.identifier,
+              $.field_access, // TODO: to be implemented
+              $.array_access_expression,
+            ),
+          ),
+          field("operator", choice("=", "+=", "-=", "*=", "/=", ":=")),
+          field("right", $.expression),
+        ),
+      ),
+
+    binary_expression: ($) =>
+      choice(
+        ...[
+          ["or", PREC.OR],
+          ["and", PREC.AND],
+          ["!=", PREC.NOT_EQUAL],
+          ["==", PREC.EQUALITY],
+          [">=", PREC.GREATER_EQUAL],
+          ["<=", PREC.LESS_EQUAL],
+          [">", PREC.GREATER],
+          ["<", PREC.LESS],
+          ["-", PREC.MINUS],
+          ["+", PREC.PLUS],
+          ["/", PREC.DIV],
+          ["*", PREC.MULT],
+          ["%", PREC.MOD],
+          ["**", PREC.POW],
+          ["??", PREC.DEFAULT_OP],
+        ].map(([operator, precedence]) =>
+          prec.left(
+            precedence,
+            seq(
+              field("left", $.expression),
+              // @ts-ignore
+              field("operator", operator),
+              field("right", $.expression),
+            ),
+          ),
+        ),
+      ),
+
+    unary_expression: ($) =>
+      choice(
+        ...[
+          ["+", PREC.UNARY],
+          ["-", PREC.UNARY],
+          ["not", PREC.NOT],
+        ].map(([operator, precedence]) =>
+          prec.left(
+            precedence,
+            seq(
+              // @ts-ignore
+              field("operator", operator),
+              field("operand", $.expression),
+            ),
+          ),
+        ),
+      ),
+
+    update_expression: ($) =>
+      prec.left(
+        PREC.UNARY,
+        choice(
+          seq($.expression, "++"),
+          seq($.expression, "--"),
+          seq("++", $.expression),
+          seq("--", $.expression),
+        ),
+      ),
+
+    primary_expression: ($) => choice($._literal),
+
+    array_access_expression: ($) =>
+      seq(
+        field("array", $.primary_expression),
+        "[",
+        sep1(field("index", $.expression), ","),
+        "]",
+      ),
+
+    array_creation_expression: ($) =>
+      prec.right(
+        seq(
+          field("type", $._simple_type),
+          $.dimension_expression,
+          $.default_value_expression,
+        ),
+      ),
+
+    dimension_expression: ($) => seq("[", sep1($.expression, ","), "]"),
+    default_value_expression: ($) => seq("(", sep1($.expression, ","), ")"),
+
+    function_invocation: ($) =>
+      seq(
+        choice(
+          field("name", $.identifier),
+          // Different invocations, e.g. with generic types can be added here
+        ),
+        field("arguments", $.argument_list),
+      ),
+
+    argument_list: ($) => seq("(", sep($.expression, ","), ")"),
+
+    field_access: ($) =>
+      seq(
+        field("dataobj", $.primary_expression),
+        ".",
+        field("field", $.identifier),
+      ),
+
+    // =================================================================
+    // Types
+    // =================================================================
+
+    _type: ($) =>
+      choice(
+        $._unannotated_type,
+        // TODO: add support for annotated types
+      ),
+
+    _unannotated_type: ($) => choice($._simple_type),
+
+    _simple_type: ($) =>
+      choice(
+        alias(
+          $.identifier,
+          $.type_identifier,
+          // TODO: add more types
+        ),
+      ),
+
+    // =================================================================
+    // Inline
+    // =================================================================
+
+    _name: ($) => choice($.identifier),
 
     // =================================================================
     // Identifier
@@ -150,7 +307,7 @@ export default grammar({
 });
 
 /**
- * Creates a rule to match one or more occurenced of `rule` separated by `seperator`
+ * Creates a rule to match one or more occurences of `rule` separated by `seperator`
  *
  * @param {RuleOrLiteral} rule
  * @param {RuleOrLiteral} seperator
@@ -158,4 +315,15 @@ export default grammar({
  */
 function sep1(rule, seperator) {
   return seq(rule, repeat(seq(seperator, rule)));
+}
+
+/**
+ * Creates a rule to match zero or more occurences of `rule` separated by `seperator`
+ *
+ * @param {RuleOrLiteral} rule
+ * @param {RuleOrLiteral} seperator
+ * @returns {ChoiceRule}
+ */
+function sep(rule, seperator) {
+  return optional(sep1(rule, seperator));
 }
