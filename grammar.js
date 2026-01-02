@@ -48,6 +48,11 @@ export default grammar({
   supertypes: ($) => [$.expression],
 
   // =================================================================
+  // Externals
+  // =================================================================
+  externals: ($) => [$._newline, $._indent, $._dedent],
+
+  // =================================================================
   // Inline
   // =================================================================
   inline: ($) => [$._name],
@@ -75,6 +80,7 @@ export default grammar({
         $.true,
         $.false,
         $.none,
+        $.default_val,
         $.character_literal,
         $.string_literal,
       ),
@@ -97,6 +103,7 @@ export default grammar({
     true: (_) => "true",
     false: (_) => "false",
     none: (_) => "none",
+    default_val: (_) => "_",
 
     character_literal: (_) =>
       token(seq("'", choice(/[^\\'\n]/, /\\./, /\\\n/), "'")),
@@ -141,7 +148,15 @@ export default grammar({
     // Expressions
     // =================================================================
 
-    expression: ($) => choice($.assignment_expression, $.binary_expression),
+    expression: ($) =>
+      choice(
+        $.assignment_expression,
+        $.binary_expression,
+        $.update_expression,
+        $.primary_expression,
+        $.unary_expression,
+        $.cast,
+      ),
 
     assignment_expression: ($) =>
       prec.right(
@@ -220,7 +235,18 @@ export default grammar({
         ),
       ),
 
-    primary_expression: ($) => choice($._literal),
+    cast: ($) =>
+      seq(field("type", $._type), "(", field("value", $.expression), ")"),
+
+    primary_expression: ($) =>
+      choice(
+        $._literal,
+        $.identifier,
+        $.field_access,
+        $.array_access_expression,
+        $.array_creation_expression,
+        $.function_invocation,
+      ),
 
     array_access_expression: ($) =>
       seq(
@@ -235,12 +261,12 @@ export default grammar({
         seq(
           field("type", $._simple_type),
           $.dimension_expression,
-          $.default_value_expression,
+          $.group_expression,
         ),
       ),
 
     dimension_expression: ($) => seq("[", sep1($.expression, ","), "]"),
-    default_value_expression: ($) => seq("(", sep1($.expression, ","), ")"),
+    group_expression: ($) => seq("(", sep1($.expression, ","), ")"),
 
     function_invocation: ($) =>
       seq(
@@ -260,6 +286,71 @@ export default grammar({
         field("field", $.identifier),
       ),
 
+    grouped_field_access: ($) =>
+      seq(
+        field("dataobj", $.primary_expression),
+        ".",
+        field("group", $.group_expression),
+      ),
+
+    initializer: ($) =>
+      seq(field("type", $._simple_type), field("values", $.group_expression)),
+
+    optional_chain: ($) =>
+      seq(
+        field("optional", $.primary_expression),
+        "?.",
+        field("field", $.identifier),
+      ),
+
+    unwrap: ($) =>
+      choice(
+        seq($.expression, "!"),
+        seq($.expression, "!", $.group_expression),
+      ),
+
+    extraction: ($) => seq($.expression, "?", $.group_expression),
+
+    range_expression: ($) =>
+      seq(optional($.expression), "..", optional($.expression)),
+
+    switch_expression: ($) =>
+      seq(
+        "switch",
+        sep1(field("subject", $.expression), ","),
+        ":",
+        field("body", $.switch_block),
+      ),
+
+    // =================================================================
+    // Blocks
+    // =================================================================
+
+    switch_block: ($) =>
+      choice(
+        seq($._indent, repeat(field("alternative", $.switch_rule)), $._dedent),
+        $._newline,
+      ),
+
+    switch_rule: ($) =>
+      seq(
+        choice($.identifier, $._literal),
+        "->",
+        choice($.expression_statement, $.block, $.throw_statement),
+      ),
+
+    // =================================================================
+    // Statements
+    // =================================================================
+
+    statement: ($) => choice($.block, $.expression_statement, ";"),
+
+    block: ($) => seq(repeat($.statement), $._dedent),
+
+    expression_statement: ($) => seq($.expression, ";"),
+
+    throw_statement: ($) => seq("throw", $.expression, ";"),
+
     // =================================================================
     // Types
     // =================================================================
@@ -274,11 +365,8 @@ export default grammar({
 
     _simple_type: ($) =>
       choice(
-        alias(
-          $.identifier,
-          $.type_identifier,
-          // TODO: add more types
-        ),
+        alias($.identifier, $.type_identifier),
+        // TODO: add more types
       ),
 
     // =================================================================

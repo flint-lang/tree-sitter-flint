@@ -8,11 +8,11 @@
 
 #define LANGUAGE_VERSION 15
 #define STATE_COUNT 5
-#define LARGE_STATE_COUNT 4
-#define SYMBOL_COUNT 7
+#define LARGE_STATE_COUNT 2
+#define SYMBOL_COUNT 10
 #define ALIAS_COUNT 0
-#define TOKEN_COUNT 4
-#define EXTERNAL_TOKEN_COUNT 0
+#define TOKEN_COUNT 7
+#define EXTERNAL_TOKEN_COUNT 3
 #define FIELD_COUNT 0
 #define MAX_ALIAS_SEQUENCE_LENGTH 2
 #define MAX_RESERVED_WORD_SET_SIZE 0
@@ -23,9 +23,12 @@ enum ts_symbol_identifiers {
   sym_identifier = 1,
   sym_line_comment = 2,
   sym_block_comment = 3,
-  sym_flint_file = 4,
-  sym__toplevel_statement = 5,
-  aux_sym_flint_file_repeat1 = 6,
+  sym__newline = 4,
+  sym__indent = 5,
+  sym__dedent = 6,
+  sym_flint_file = 7,
+  sym__toplevel_statement = 8,
+  aux_sym_flint_file_repeat1 = 9,
 };
 
 static const char * const ts_symbol_names[] = {
@@ -33,6 +36,9 @@ static const char * const ts_symbol_names[] = {
   [sym_identifier] = "identifier",
   [sym_line_comment] = "line_comment",
   [sym_block_comment] = "block_comment",
+  [sym__newline] = "_newline",
+  [sym__indent] = "_indent",
+  [sym__dedent] = "_dedent",
   [sym_flint_file] = "flint_file",
   [sym__toplevel_statement] = "_toplevel_statement",
   [aux_sym_flint_file_repeat1] = "flint_file_repeat1",
@@ -43,6 +49,9 @@ static const TSSymbol ts_symbol_map[] = {
   [sym_identifier] = sym_identifier,
   [sym_line_comment] = sym_line_comment,
   [sym_block_comment] = sym_block_comment,
+  [sym__newline] = sym__newline,
+  [sym__indent] = sym__indent,
+  [sym__dedent] = sym__dedent,
   [sym_flint_file] = sym_flint_file,
   [sym__toplevel_statement] = sym__toplevel_statement,
   [aux_sym_flint_file_repeat1] = aux_sym_flint_file_repeat1,
@@ -63,6 +72,18 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
   },
   [sym_block_comment] = {
     .visible = true,
+    .named = true,
+  },
+  [sym__newline] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__indent] = {
+    .visible = false,
+    .named = true,
+  },
+  [sym__dedent] = {
+    .visible = false,
     .named = true,
   },
   [sym_flint_file] = {
@@ -345,7 +366,7 @@ static bool ts_lex_keywords(TSLexer *lexer, TSStateId state) {
 }
 
 static const TSLexerMode ts_lex_modes[STATE_COUNT] = {
-  [0] = {.lex_state = 0},
+  [0] = {.lex_state = 0, .external_lex_state = 1},
   [1] = {.lex_state = 0},
   [2] = {.lex_state = 0},
   [3] = {.lex_state = 0},
@@ -358,6 +379,9 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_identifier] = ACTIONS(1),
     [sym_line_comment] = ACTIONS(3),
     [sym_block_comment] = ACTIONS(3),
+    [sym__newline] = ACTIONS(1),
+    [sym__indent] = ACTIONS(1),
+    [sym__dedent] = ACTIONS(1),
   },
   [STATE(1)] = {
     [sym_flint_file] = STATE(4),
@@ -367,24 +391,28 @@ static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym_line_comment] = ACTIONS(3),
     [sym_block_comment] = ACTIONS(3),
   },
-  [STATE(2)] = {
-    [sym__toplevel_statement] = STATE(3),
-    [aux_sym_flint_file_repeat1] = STATE(3),
-    [ts_builtin_sym_end] = ACTIONS(7),
-    [sym_line_comment] = ACTIONS(3),
-    [sym_block_comment] = ACTIONS(3),
-  },
-  [STATE(3)] = {
-    [sym__toplevel_statement] = STATE(3),
-    [aux_sym_flint_file_repeat1] = STATE(3),
-    [ts_builtin_sym_end] = ACTIONS(9),
-    [sym_line_comment] = ACTIONS(3),
-    [sym_block_comment] = ACTIONS(3),
-  },
 };
 
 static const uint16_t ts_small_parse_table[] = {
-  [0] = 2,
+  [0] = 3,
+    ACTIONS(7), 1,
+      ts_builtin_sym_end,
+    ACTIONS(3), 2,
+      sym_line_comment,
+      sym_block_comment,
+    STATE(3), 2,
+      sym__toplevel_statement,
+      aux_sym_flint_file_repeat1,
+  [12] = 3,
+    ACTIONS(9), 1,
+      ts_builtin_sym_end,
+    ACTIONS(3), 2,
+      sym_line_comment,
+      sym_block_comment,
+    STATE(3), 2,
+      sym__toplevel_statement,
+      aux_sym_flint_file_repeat1,
+  [24] = 2,
     ACTIONS(11), 1,
       ts_builtin_sym_end,
     ACTIONS(3), 2,
@@ -393,7 +421,9 @@ static const uint16_t ts_small_parse_table[] = {
 };
 
 static const uint32_t ts_small_parse_table_map[] = {
-  [SMALL_STATE(4)] = 0,
+  [SMALL_STATE(2)] = 0,
+  [SMALL_STATE(3)] = 12,
+  [SMALL_STATE(4)] = 24,
 };
 
 static const TSParseActionEntry ts_parse_actions[] = {
@@ -406,9 +436,35 @@ static const TSParseActionEntry ts_parse_actions[] = {
   [11] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
 };
 
+enum ts_external_scanner_symbol_identifiers {
+  ts_external_token__newline = 0,
+  ts_external_token__indent = 1,
+  ts_external_token__dedent = 2,
+};
+
+static const TSSymbol ts_external_scanner_symbol_map[EXTERNAL_TOKEN_COUNT] = {
+  [ts_external_token__newline] = sym__newline,
+  [ts_external_token__indent] = sym__indent,
+  [ts_external_token__dedent] = sym__dedent,
+};
+
+static const bool ts_external_scanner_states[2][EXTERNAL_TOKEN_COUNT] = {
+  [1] = {
+    [ts_external_token__newline] = true,
+    [ts_external_token__indent] = true,
+    [ts_external_token__dedent] = true,
+  },
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+void *tree_sitter_flint_external_scanner_create(void);
+void tree_sitter_flint_external_scanner_destroy(void *);
+bool tree_sitter_flint_external_scanner_scan(void *, TSLexer *, const bool *);
+unsigned tree_sitter_flint_external_scanner_serialize(void *, char *);
+void tree_sitter_flint_external_scanner_deserialize(void *, const char *, unsigned);
+
 #ifdef TREE_SITTER_HIDE_SYMBOLS
 #define TS_PUBLIC
 #elif defined(_WIN32)
@@ -443,6 +499,15 @@ TS_PUBLIC const TSLanguage *tree_sitter_flint(void) {
     .lex_fn = ts_lex,
     .keyword_lex_fn = ts_lex_keywords,
     .keyword_capture_token = sym_identifier,
+    .external_scanner = {
+      &ts_external_scanner_states[0][0],
+      ts_external_scanner_symbol_map,
+      tree_sitter_flint_external_scanner_create,
+      tree_sitter_flint_external_scanner_destroy,
+      tree_sitter_flint_external_scanner_scan,
+      tree_sitter_flint_external_scanner_serialize,
+      tree_sitter_flint_external_scanner_deserialize,
+    },
     .primary_state_ids = ts_primary_state_ids,
     .name = "flint",
     .max_reserved_word_set_size = 0,
