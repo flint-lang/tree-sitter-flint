@@ -11,7 +11,7 @@
 #define LARGE_STATE_COUNT 4
 #define SYMBOL_COUNT 6
 #define ALIAS_COUNT 0
-#define TOKEN_COUNT 4
+#define TOKEN_COUNT 3
 #define EXTERNAL_TOKEN_COUNT 0
 #define FIELD_COUNT 0
 #define MAX_ALIAS_SEQUENCE_LENGTH 2
@@ -20,29 +20,29 @@
 #define SUPERTYPE_COUNT 0
 
 enum ts_symbol_identifiers {
-  sym_number = 1,
-  sym_string = 2,
-  sym_identifier = 3,
-  sym_source_file = 4,
-  aux_sym_source_file_repeat1 = 5,
+  sym_line_comment = 1,
+  sym_block_comment = 2,
+  sym_flint_file = 3,
+  sym__toplevel_statement = 4,
+  aux_sym_flint_file_repeat1 = 5,
 };
 
 static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
-  [sym_number] = "number",
-  [sym_string] = "string",
-  [sym_identifier] = "identifier",
-  [sym_source_file] = "source_file",
-  [aux_sym_source_file_repeat1] = "source_file_repeat1",
+  [sym_line_comment] = "line_comment",
+  [sym_block_comment] = "block_comment",
+  [sym_flint_file] = "flint_file",
+  [sym__toplevel_statement] = "_toplevel_statement",
+  [aux_sym_flint_file_repeat1] = "flint_file_repeat1",
 };
 
 static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
-  [sym_number] = sym_number,
-  [sym_string] = sym_string,
-  [sym_identifier] = sym_identifier,
-  [sym_source_file] = sym_source_file,
-  [aux_sym_source_file_repeat1] = aux_sym_source_file_repeat1,
+  [sym_line_comment] = sym_line_comment,
+  [sym_block_comment] = sym_block_comment,
+  [sym_flint_file] = sym_flint_file,
+  [sym__toplevel_statement] = sym__toplevel_statement,
+  [aux_sym_flint_file_repeat1] = aux_sym_flint_file_repeat1,
 };
 
 static const TSSymbolMetadata ts_symbol_metadata[] = {
@@ -50,23 +50,23 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = true,
   },
-  [sym_number] = {
+  [sym_line_comment] = {
     .visible = true,
     .named = true,
   },
-  [sym_string] = {
+  [sym_block_comment] = {
     .visible = true,
     .named = true,
   },
-  [sym_identifier] = {
+  [sym_flint_file] = {
     .visible = true,
     .named = true,
   },
-  [sym_source_file] = {
-    .visible = true,
+  [sym__toplevel_statement] = {
+    .visible = false,
     .named = true,
   },
-  [aux_sym_source_file_repeat1] = {
+  [aux_sym_flint_file_repeat1] = {
     .visible = false,
     .named = false,
   },
@@ -93,43 +93,34 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
   eof = lexer->eof(lexer);
   switch (state) {
     case 0:
-      if (eof) ADVANCE(3);
-      if (lookahead == '"') ADVANCE(1);
+      if (eof) ADVANCE(4);
+      if (lookahead == '/') ADVANCE(1);
       if (('\t' <= lookahead && lookahead <= '\r') ||
           lookahead == ' ') SKIP(0);
-      if (('0' <= lookahead && lookahead <= '9')) ADVANCE(4);
-      if (('A' <= lookahead && lookahead <= 'Z') ||
-          lookahead == '_' ||
-          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(7);
       END_STATE();
     case 1:
-      if (lookahead == '"') ADVANCE(6);
-      if (lookahead != 0) ADVANCE(1);
+      if (lookahead == '*') ADVANCE(3);
+      if (lookahead == '/') ADVANCE(5);
       END_STATE();
     case 2:
-      if (('0' <= lookahead && lookahead <= '9')) ADVANCE(5);
+      if (lookahead == '*') ADVANCE(2);
+      if (lookahead == '/') ADVANCE(6);
+      if (lookahead != 0) ADVANCE(3);
       END_STATE();
     case 3:
-      ACCEPT_TOKEN(ts_builtin_sym_end);
+      if (lookahead == '*') ADVANCE(2);
+      if (lookahead != 0) ADVANCE(3);
       END_STATE();
     case 4:
-      ACCEPT_TOKEN(sym_number);
-      if (lookahead == '.') ADVANCE(2);
-      if (('0' <= lookahead && lookahead <= '9')) ADVANCE(4);
+      ACCEPT_TOKEN(ts_builtin_sym_end);
       END_STATE();
     case 5:
-      ACCEPT_TOKEN(sym_number);
-      if (('0' <= lookahead && lookahead <= '9')) ADVANCE(5);
+      ACCEPT_TOKEN(sym_line_comment);
+      if (lookahead != 0 &&
+          lookahead != '\n') ADVANCE(5);
       END_STATE();
     case 6:
-      ACCEPT_TOKEN(sym_string);
-      END_STATE();
-    case 7:
-      ACCEPT_TOKEN(sym_identifier);
-      if (('0' <= lookahead && lookahead <= '9') ||
-          ('A' <= lookahead && lookahead <= 'Z') ||
-          lookahead == '_' ||
-          ('a' <= lookahead && lookahead <= 'z')) ADVANCE(7);
+      ACCEPT_TOKEN(sym_block_comment);
       END_STATE();
     default:
       return false;
@@ -147,38 +138,40 @@ static const TSLexerMode ts_lex_modes[STATE_COUNT] = {
 static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   [STATE(0)] = {
     [ts_builtin_sym_end] = ACTIONS(1),
-    [sym_number] = ACTIONS(1),
-    [sym_string] = ACTIONS(1),
-    [sym_identifier] = ACTIONS(1),
+    [sym_line_comment] = ACTIONS(3),
+    [sym_block_comment] = ACTIONS(3),
   },
   [STATE(1)] = {
-    [sym_source_file] = STATE(4),
-    [aux_sym_source_file_repeat1] = STATE(2),
-    [ts_builtin_sym_end] = ACTIONS(3),
-    [sym_number] = ACTIONS(5),
-    [sym_string] = ACTIONS(5),
-    [sym_identifier] = ACTIONS(5),
+    [sym_flint_file] = STATE(4),
+    [sym__toplevel_statement] = STATE(2),
+    [aux_sym_flint_file_repeat1] = STATE(2),
+    [ts_builtin_sym_end] = ACTIONS(5),
+    [sym_line_comment] = ACTIONS(3),
+    [sym_block_comment] = ACTIONS(3),
   },
   [STATE(2)] = {
-    [aux_sym_source_file_repeat1] = STATE(3),
+    [sym__toplevel_statement] = STATE(3),
+    [aux_sym_flint_file_repeat1] = STATE(3),
     [ts_builtin_sym_end] = ACTIONS(7),
-    [sym_number] = ACTIONS(9),
-    [sym_string] = ACTIONS(9),
-    [sym_identifier] = ACTIONS(9),
+    [sym_line_comment] = ACTIONS(3),
+    [sym_block_comment] = ACTIONS(3),
   },
   [STATE(3)] = {
-    [aux_sym_source_file_repeat1] = STATE(3),
-    [ts_builtin_sym_end] = ACTIONS(11),
-    [sym_number] = ACTIONS(13),
-    [sym_string] = ACTIONS(13),
-    [sym_identifier] = ACTIONS(13),
+    [sym__toplevel_statement] = STATE(3),
+    [aux_sym_flint_file_repeat1] = STATE(3),
+    [ts_builtin_sym_end] = ACTIONS(9),
+    [sym_line_comment] = ACTIONS(3),
+    [sym_block_comment] = ACTIONS(3),
   },
 };
 
 static const uint16_t ts_small_parse_table[] = {
-  [0] = 1,
-    ACTIONS(16), 1,
+  [0] = 2,
+    ACTIONS(11), 1,
       ts_builtin_sym_end,
+    ACTIONS(3), 2,
+      sym_line_comment,
+      sym_block_comment,
 };
 
 static const uint32_t ts_small_parse_table_map[] = {
@@ -188,13 +181,11 @@ static const uint32_t ts_small_parse_table_map[] = {
 static const TSParseActionEntry ts_parse_actions[] = {
   [0] = {.entry = {.count = 0, .reusable = false}},
   [1] = {.entry = {.count = 1, .reusable = false}}, RECOVER(),
-  [3] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 0, 0, 0),
-  [5] = {.entry = {.count = 1, .reusable = true}}, SHIFT(2),
-  [7] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_source_file, 1, 0, 0),
-  [9] = {.entry = {.count = 1, .reusable = true}}, SHIFT(3),
-  [11] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_source_file_repeat1, 2, 0, 0),
-  [13] = {.entry = {.count = 2, .reusable = true}}, REDUCE(aux_sym_source_file_repeat1, 2, 0, 0), SHIFT_REPEAT(3),
-  [16] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
+  [3] = {.entry = {.count = 1, .reusable = true}}, SHIFT_EXTRA(),
+  [5] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_flint_file, 0, 0, 0),
+  [7] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_flint_file, 1, 0, 0),
+  [9] = {.entry = {.count = 1, .reusable = true}}, REDUCE(aux_sym_flint_file_repeat1, 2, 0, 0),
+  [11] = {.entry = {.count = 1, .reusable = true}},  ACCEPT_INPUT(),
 };
 
 #ifdef __cplusplus
