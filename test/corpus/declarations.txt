@@ -1,0 +1,29 @@
+=================================================================================
+enum declaration
+=================================================================================
+
+enum MyEnum:
+    VAL1, VAL2, VAL3;
+
+enum MyEnum:
+    VAL1,
+    VAL2,
+    VAL3;
+
+---
+
+(flint_file
+  (compound_statement
+    (enum_declaration
+      (identifier)
+      (enum_body
+        (identifier)
+        (identifier)
+        (identifier))))
+  (compound_statement
+    (enum_declaration
+      (identifier)
+      (enum_body
+        (identifier)
+        (identifier)
+        (identifier)))))

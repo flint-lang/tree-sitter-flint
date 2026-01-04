@@ -1,0 +1,260 @@
+=================================================================================
+standalone assignment expression
+=================================================================================
+
+x = 3;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (identifier)
+        (decimal_integer_literal)))))
+
+=================================================================================
+standalone binary expression
+=================================================================================
+
+a > b;
+a < b;
+a == b;
+a >= b;
+a <= b;
+a != b;
+a and b;
+a or b;
+3 + 2;
+3 - 2;
+3 * 2;
+9 / 3;
+4 % 3;
+2 ** 2;
+2 ?? 2;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (decimal_integer_literal)
+        (decimal_integer_literal)))))
+
+=================================================================================
+update expression
+=================================================================================
+
+i++;
+--x;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (update_expression
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (update_expression
+        (identifier)))))
+
+=================================================================================
+unary expression
+=================================================================================
+
++4;
+-x;
+not y;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (unary_expression
+        (decimal_integer_literal))))
+  (simple_statement
+    (expression_statement
+      (unary_expression
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (unary_expression
+        (identifier)))))
+
+=================================================================================
+switch expression
+=================================================================================
+
+switch e:
+    "VAL1" -> x;
+    "VAL2" -> y;
+    "VAL3" -> z;
+
+---
+
+(flint_file
+  (compound_statement
+    (switch_expression
+      (identifier)
+      (block
+        (switch_rule
+          (string_literal)
+          (expression_statement
+            (identifier)))
+        (switch_rule
+          (string_literal)
+          (expression_statement
+            (identifier)))
+        (switch_rule
+          (string_literal)
+          (expression_statement
+            (identifier)))))))
+
+=================================================================================
+field access
+=================================================================================
+
+x.y;
+x.y = 14;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (field_access
+        (identifier)
+        (identifier))))
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (field_access
+          (identifier)
+          (identifier))
+        (decimal_integer_literal)))))
+
+=================================================================================
+array access expression
+=================================================================================
+
+arr[3];
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (array_access_expression
+        (identifier)
+        (array_rank_specifier
+          (decimal_integer_literal))))))
+
+=================================================================================
+array creation expression
+=================================================================================
+
+i32[10](0);
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (array_creation_expression
+        (integral_type)
+        (array_rank_specifier
+          (decimal_integer_literal))
+        (group_expression
+          (decimal_integer_literal))))))
+
+=================================================================================
+if statement
+=================================================================================
+
+if x:
+    y;
+
+---
+
+(flint_file
+  (compound_statement
+    (if_statement
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier)))))))
