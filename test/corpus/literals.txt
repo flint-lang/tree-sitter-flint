@@ -1,0 +1,206 @@
+=================================================================================
+decimal integer literals
+=================================================================================
+
+123;
+42;
+1_000_000_000;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (decimal_integer_literal)))
+  (simple_statement
+    (expression_statement
+      (decimal_integer_literal)))
+  (simple_statement
+    (expression_statement
+      (decimal_integer_literal))))
+
+=================================================================================
+floating point literals
+=================================================================================
+
+1.23;
+.2345;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (decimal_floating_point_literal)))
+  (simple_statement
+    (expression_statement
+      (decimal_floating_point_literal))))
+
+=================================================================================
+boolean literals
+=================================================================================
+
+true;
+false;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (true)))
+  (simple_statement
+    (expression_statement
+      (false))))
+
+=================================================================================
+none literal
+=================================================================================
+
+none;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (none))))
+
+=================================================================================
+default literal
+=================================================================================
+
+_;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (default_val))))
+
+=================================================================================
+character literals
+=================================================================================
+
+'a';
+'%';
+'\t';
+'\\';
+'\'';
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal))))
+
+=================================================================================
+string literals
+=================================================================================
+
+"Hello, World\n";
+"test";
+$"Interpolated string";
+$"Actually {x} interpolated string";
+"Escaped \\ a slash";
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (string_literal
+        (escape_sequence))))
+  (simple_statement
+    (expression_statement
+      (string_literal)))
+  (simple_statement
+    (expression_statement
+      (string_literal)))
+  (simple_statement
+    (expression_statement
+      (string_literal)))
+  (simple_statement
+    (expression_statement
+      (string_literal
+        (escape_sequence)))))
+
+=================================================================================
+escape sequences
+=================================================================================
+
+"\n\a\b\fhi im a piece of text\t\v and im some more text \\\'\"\?";
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (string_literal
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)
+        (escape_sequence)))))
+
+=========================================
+char escapes
+=========================================
+
+'\b';
+'\t';
+'\n';
+'\f';
+'\r';
+'\"';
+'\'';
+'\\' + 'a';
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (character_literal)))
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (character_literal)
+        (character_literal)))))
