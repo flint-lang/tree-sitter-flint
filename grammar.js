@@ -513,12 +513,14 @@ export default grammar({
     typed_variable_declaration: ($) =>
       seq(
         field("type", $._unannotated_type),
+        optional("mut"),
         $._variable_declarator_id,
         optional(seq("=", field("value", $._variable_initializer))),
       ),
 
     inferred_variable_declaration: ($) =>
       seq(
+        optional("mut"),
         $._variable_declarator_id,
         ":=",
         field("value", $._variable_initializer),
