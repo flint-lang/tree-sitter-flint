@@ -1,4 +1,41 @@
 =================================================================================
+variable declaration
+=================================================================================
+
+i32 a = 32;
+str b = "hi";
+inferred := i32[10](0);
+
+---
+
+(flint_file
+  (compound_statement
+    (variable_declaration
+      (typed_variable_declaration
+        (integral_type)
+        (identifier)
+        (decimal_integer_literal))))
+  (simple_statement)
+  (compound_statement
+    (variable_declaration
+      (typed_variable_declaration
+        (type_identifier)
+        (identifier)
+        (string_literal))))
+  (simple_statement)
+  (compound_statement
+    (variable_declaration
+      (inferred_variable_declaration
+        (identifier)
+        (array_creation_expression
+          (integral_type)
+          (array_rank_specifier
+            (decimal_integer_literal))
+          (group_expression
+            (decimal_integer_literal))))))
+  (simple_statement))
+
+=================================================================================
 enum declaration
 =================================================================================
 
@@ -27,3 +64,25 @@ enum MyEnum:
         (identifier)
         (identifier)
         (identifier)))))
+
+=================================================================================
+function declaration
+=================================================================================
+
+def main():
+    print("Hello, World");
+
+---
+
+(flint_file
+  (compound_statement
+    (function_declaration
+      (identifier)
+      (parameters)
+      (block
+        (simple_statement
+          (expression_statement
+            (call
+              (type_identifier)
+              (group_expression
+                (string_literal)))))))))

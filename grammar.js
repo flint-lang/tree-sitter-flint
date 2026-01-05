@@ -71,6 +71,8 @@ export default grammar({
   conflicts: ($) => [
     [$._simple_type, $.primary_expression],
     [$.compound_statement, $.expression],
+    [$.primary_expression, $.scoped_identifier],
+    [$.array_creation_expression, $._unannotated_type],
   ],
 
   // =================================================================
@@ -87,7 +89,7 @@ export default grammar({
 
     flint_file: ($) => repeat($._toplevel_statement),
 
-    _toplevel_statement: ($) => choice($.statement),
+    _toplevel_statement: ($) => choice($.statement, $.clause),
 
     // =================================================================
     // Literals
@@ -110,12 +112,7 @@ export default grammar({
     decimal_floating_point_literal: (_) =>
       token(
         choice(
-          seq(
-            DECIMAL_DIGITS,
-            ".",
-            optional(DECIMAL_DIGITS),
-            optional(/[fFdD]/),
-          ),
+          seq(DECIMAL_DIGITS, ".", DECIMAL_DIGITS, optional(/[fFdD]/)),
           seq(".", DECIMAL_DIGITS, optional(/[fFdD]/)),
         ),
       ),
@@ -262,7 +259,7 @@ export default grammar({
         $.function_invocation,
         $.group_expression,
         $.grouped_field_access,
-        $.initializer,
+        $.call,
         $.optional_chain,
         $.unwrap,
         $.extraction,
@@ -318,7 +315,7 @@ export default grammar({
         ),
       ),
 
-    initializer: ($) =>
+    call: ($) =>
       seq(field("type", $._simple_type), field("values", $.group_expression)),
 
     optional_chain: ($) =>
@@ -337,7 +334,10 @@ export default grammar({
     extraction: ($) => seq($.expression, "?", $.group_expression),
 
     range_expression: ($) =>
-      prec.right(seq(optional($.expression), "..", optional($.expression))),
+      prec.right(
+        PREC.FIELD_ACCESS,
+        seq(optional($.expression), "..", optional($.expression)),
+      ),
 
     switch_expression: ($) =>
       seq(
@@ -367,11 +367,15 @@ export default grammar({
         ),
       ),
 
+    block: ($) => seq(repeat($.statement), $._dedent),
+
     // =================================================================
     // Clauses
     // =================================================================
 
-    // TODO: Don't forget about those :)
+    clause: ($) => choice($.use_clause),
+
+    use_clause: ($) => seq("use", $._name),
 
     // =================================================================
     // Statements
@@ -380,18 +384,27 @@ export default grammar({
     statement: ($) => choice($.simple_statement, $.compound_statement),
 
     simple_statement: ($) =>
-      choice($.expression_statement, $.break_statement, ";"),
-
-    block: ($) => seq(repeat($.statement), $._dedent),
+      choice($.expression_statement, $.break_statement, ";", $.throw_statement),
 
     break_statement: ($) => seq("break", ";"),
+
+    expression_statement: ($) => seq($.expression, ";"),
+
+    throw_statement: ($) => seq("throw", $.expression),
 
     // =================================================================
     // Compound Statements
     // =================================================================
 
     compound_statement: ($) =>
-      choice($.declaration, $.if_statement, $.switch_expression),
+      choice(
+        $.declaration,
+        $.if_statement,
+        $.switch_expression,
+        $.do_statement,
+        $.while_statement,
+        $.enhanced_for_statement,
+      ),
 
     if_statement: ($) =>
       prec.right(
@@ -415,9 +428,39 @@ export default grammar({
 
     else_clause: ($) => seq("else", ":", field("body", $._suite)),
 
-    expression_statement: ($) => seq($.expression, ";"),
+    do_statement: ($) =>
+      seq(
+        "do",
+        ":",
+        field("body", $._suite),
+        "while",
+        field("condition", $.expression),
+        ";",
+      ),
 
-    throw_statement: ($) => seq("throw", $.expression),
+    while_statement: ($) =>
+      seq(
+        "while",
+        field("condition", $.expression),
+        ":",
+        field("body", $._suite),
+      ),
+
+    enhanced_for_statement: ($) =>
+      seq(
+        "for",
+        sep1(
+          choice(
+            seq(field("type", $._unannotated_type), $._variable_declarator_id),
+            $.default_val,
+          ),
+          ",",
+        ),
+        "in",
+        field("value", $.expression),
+        ":",
+        field("body", $._suite),
+      ),
 
     // =================================================================
     // Declarations
@@ -426,7 +469,11 @@ export default grammar({
     declaration: ($) =>
       prec(
         PREC.DECL,
-        choice($.enum_declaration),
+        choice(
+          $.enum_declaration,
+          $.variable_declaration,
+          $.function_declaration,
+        ),
         // TODO: Add declarations
       ),
 
@@ -437,6 +484,47 @@ export default grammar({
       choice(
         seq($._indent, sep($.identifier, ","), optional(","), ";", $._dedent),
         $._newline,
+      ),
+
+    variable_declaration: ($) =>
+      choice($.typed_variable_declaration, $.inferred_variable_declaration),
+
+    typed_variable_declaration: ($) =>
+      seq(
+        field("type", $._unannotated_type),
+        $._variable_declarator_id,
+        optional(seq("=", field("value", $._variable_initializer))),
+      ),
+
+    inferred_variable_declaration: ($) =>
+      seq(
+        $._variable_declarator_id,
+        ":=",
+        field("value", $._variable_initializer),
+      ),
+
+    _variable_declarator_id: ($) =>
+      field("name", choice($.identifier, $.default_val)),
+
+    _variable_initializer: ($) => $.expression,
+
+    function_declaration: ($) =>
+      seq(
+        "def",
+        field("name", $.identifier),
+        field("parameters", $.parameters),
+        ":",
+        field("body", $._suite),
+      ),
+
+    parameters: ($) =>
+      seq(
+        "(",
+        sep(
+          seq(field("type", $._unannotated_type), $._variable_declarator_id),
+          ",",
+        ),
+        ")",
       ),
 
     // =================================================================
@@ -458,6 +546,7 @@ export default grammar({
         $.bool_type,
         $.void_type,
         alias($.identifier, $.type_identifier),
+        $.scoped_identifier,
       ),
 
     array_type: ($) =>
@@ -511,7 +600,7 @@ export default grammar({
     // Inline
     // =================================================================
 
-    _name: ($) => choice($.identifier),
+    _name: ($) => choice($.identifier, $.scoped_identifier),
 
     // =================================================================
     // Identifier
@@ -519,6 +608,9 @@ export default grammar({
 
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
     identifier: (_) => /[\p{XID_Start}_$][\p{XID_Continue}_$]*/u,
+
+    scoped_identifier: ($) =>
+      seq(field("scope", $._name), ".", field("name", $.identifier)),
 
     // =================================================================
     // Util
