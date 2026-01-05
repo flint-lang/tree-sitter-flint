@@ -1,0 +1,103 @@
+=================================================================================
+break statement
+=================================================================================
+
+break;
+
+---
+
+(flint_file
+  (simple_statement
+    (break_statement)))
+
+=================================================================================
+expression statement
+=================================================================================
+
+arr[3];
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (array_access_expression
+        (identifier)
+        (array_rank_specifier
+          (decimal_integer_literal))))))
+
+=================================================================================
+throw statement
+=================================================================================
+
+throw x;
+
+---
+
+(flint_file
+  (simple_statement
+    (throw_statement
+      (identifier)))
+  (simple_statement))
+
+=================================================================================
+if statement
+=================================================================================
+
+if x:
+    y;
+
+if a:
+    b;
+else if c:
+    d;
+else:
+    e;
+
+---
+
+(flint_file
+  (compound_statement
+    (if_statement
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier))))))
+  (compound_statement
+    (if_statement
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier))))
+      (else_if_clause
+        (identifier)
+        (block
+          (simple_statement
+            (expression_statement
+              (identifier)))))
+      (else_clause
+        (block
+          (simple_statement
+            (expression_statement
+              (identifier))))))))
+
+=================================================================================
+do statement
+=================================================================================
+
+do:
+    x;
+while y;
+
+---
+
+(flint_file
+  (compound_statement
+    (do_statement
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier))))
+      (identifier))))

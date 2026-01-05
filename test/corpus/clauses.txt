@@ -1,0 +1,20 @@
+=================================================================================
+use clause
+=================================================================================
+
+use Core.print
+use Core.time
+
+---
+
+(flint_file
+  (clause
+    (use_clause
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (clause
+    (use_clause
+      (scoped_identifier
+        (identifier)
+        (identifier)))))
