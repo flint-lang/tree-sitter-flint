@@ -6,17 +6,16 @@
       "camelcase": "Flint",
       "title": "Flint",
       "scope": "source.flint",
-      "file-types": [
-        "ft",
-        "flint"
-      ],
+      "file-types": ["ft", "flint"],
       "injection-regex": "^flint$",
-      "class-name": "TreeSitterFlint"
+      "class-name": "TreeSitterFlint",
+      "highlights": "queries/highlights.scm",
+      "tags": "queries/tags.scm"
     }
   ],
   "metadata": {
-    "version": "0.0.1",
-    "license": "Apache-2.0",
+    "version": "0.1.0",
+    "license": "MIT",
     "description": "Tree Sitter grammar for the Flint programming language",
     "authors": [
       {
@@ -26,8 +25,7 @@
       }
     ],
     "links": {
-      "repository": "https://github.com/flint-lang/tree-sitter-flint",
-      "funding": ""
+      "repository": "https://github.com/flint-lang/tree-sitter-flint"
     }
   },
   "bindings": {
