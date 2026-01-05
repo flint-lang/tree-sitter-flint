@@ -1,0 +1,41 @@
+=================================================================================
+comment
+=================================================================================
+
+
+// This is a comment
+/* This is also a comment */
+/* this comment /* // /** ends here: */
+/**/
+
+a /* dkjfhsdf + */ + b; /* ***** */
+
+---
+
+(flint_file
+  (line_comment)
+  (block_comment)
+  (block_comment)
+  (block_comment)
+  (simple_statement
+    (expression_statement
+      (binary_expression
+        (identifier)
+        (block_comment)
+        (identifier))))
+  (block_comment))
+
+=================================================================================
+comments and literals
+=================================================================================
+
+123;
+// comment
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (decimal_integer_literal)))
+  (line_comment))
