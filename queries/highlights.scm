@@ -81,9 +81,6 @@
   (block_comment)
 ] @comment
 
-(test_declaration
-  (string_literal) @string.special)
-
 ; Keywords
 
 [

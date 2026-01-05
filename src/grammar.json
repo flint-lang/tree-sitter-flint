@@ -3035,101 +3035,165 @@
       }
     },
     "reserved": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "aligned"
-        },
-        {
-          "type": "STRING",
-          "value": "as"
-        },
-        {
-          "type": "STRING",
-          "value": "async"
-        },
-        {
-          "type": "STRING",
-          "value": "const"
-        },
-        {
-          "type": "STRING",
-          "value": "continue"
-        },
-        {
-          "type": "STRING",
-          "value": "data"
-        },
-        {
-          "type": "STRING",
-          "value": "entity"
-        },
-        {
-          "type": "STRING",
-          "value": "error"
-        },
-        {
-          "type": "STRING",
-          "value": "export"
-        },
-        {
-          "type": "STRING",
-          "value": "extends"
-        },
-        {
-          "type": "STRING",
-          "value": "extern"
-        },
-        {
-          "type": "STRING",
-          "value": "func"
-        },
-        {
-          "type": "STRING",
-          "value": "hook"
-        },
-        {
-          "type": "STRING",
-          "value": "link"
-        },
-        {
-          "type": "STRING",
-          "value": "lock"
-        },
-        {
-          "type": "STRING",
-          "value": "parallel"
-        },
-        {
-          "type": "STRING",
-          "value": "persistent"
-        },
-        {
-          "type": "STRING",
-          "value": "requires"
-        },
-        {
-          "type": "STRING",
-          "value": "shared"
-        },
-        {
-          "type": "STRING",
-          "value": "spawn"
-        },
-        {
-          "type": "STRING",
-          "value": "sync"
-        },
-        {
-          "type": "STRING",
-          "value": "type"
-        },
-        {
-          "type": "STRING",
-          "value": "variant"
-        }
-      ]
+      "type": "PREC",
+      "value": -5,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "aligned"
+          },
+          {
+            "type": "STRING",
+            "value": "as"
+          },
+          {
+            "type": "STRING",
+            "value": "async"
+          },
+          {
+            "type": "STRING",
+            "value": "break"
+          },
+          {
+            "type": "STRING",
+            "value": "catch"
+          },
+          {
+            "type": "STRING",
+            "value": "const"
+          },
+          {
+            "type": "STRING",
+            "value": "continue"
+          },
+          {
+            "type": "STRING",
+            "value": "data"
+          },
+          {
+            "type": "STRING",
+            "value": "def"
+          },
+          {
+            "type": "STRING",
+            "value": "do"
+          },
+          {
+            "type": "STRING",
+            "value": "else"
+          },
+          {
+            "type": "STRING",
+            "value": "entity"
+          },
+          {
+            "type": "STRING",
+            "value": "enum"
+          },
+          {
+            "type": "STRING",
+            "value": "error"
+          },
+          {
+            "type": "STRING",
+            "value": "export"
+          },
+          {
+            "type": "STRING",
+            "value": "extends"
+          },
+          {
+            "type": "STRING",
+            "value": "extern"
+          },
+          {
+            "type": "STRING",
+            "value": "for"
+          },
+          {
+            "type": "STRING",
+            "value": "func"
+          },
+          {
+            "type": "STRING",
+            "value": "hook"
+          },
+          {
+            "type": "STRING",
+            "value": "if"
+          },
+          {
+            "type": "STRING",
+            "value": "link"
+          },
+          {
+            "type": "STRING",
+            "value": "lock"
+          },
+          {
+            "type": "STRING",
+            "value": "mut"
+          },
+          {
+            "type": "STRING",
+            "value": "parallel"
+          },
+          {
+            "type": "STRING",
+            "value": "persistent"
+          },
+          {
+            "type": "STRING",
+            "value": "requires"
+          },
+          {
+            "type": "STRING",
+            "value": "return"
+          },
+          {
+            "type": "STRING",
+            "value": "shared"
+          },
+          {
+            "type": "STRING",
+            "value": "spawn"
+          },
+          {
+            "type": "STRING",
+            "value": "switch"
+          },
+          {
+            "type": "STRING",
+            "value": "sync"
+          },
+          {
+            "type": "STRING",
+            "value": "test"
+          },
+          {
+            "type": "STRING",
+            "value": "throw"
+          },
+          {
+            "type": "STRING",
+            "value": "type"
+          },
+          {
+            "type": "STRING",
+            "value": "use"
+          },
+          {
+            "type": "STRING",
+            "value": "variant"
+          },
+          {
+            "type": "STRING",
+            "value": "while"
+          }
+        ]
+      }
     },
     "line_comment": {
       "type": "TOKEN",
