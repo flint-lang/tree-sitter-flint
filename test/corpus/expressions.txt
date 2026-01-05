@@ -146,7 +146,7 @@ print("Hello, World!");
 (flint_file
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (identifier)
         (group_expression
           (string_literal))))))
@@ -214,7 +214,7 @@ obj(param);
 (flint_file
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (identifier)
         (group_expression
           (identifier))))))
@@ -230,7 +230,7 @@ opt?.print();
 (flint_file
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (optional_chain
           (identifier)
           (identifier))
@@ -295,13 +295,13 @@ i32(4.3f);
 (flint_file
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (str_type)
         (group_expression
           (decimal_integer_literal)))))
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (integral_type)
         (group_expression
           (decimal_floating_point_literal))))))
@@ -479,4 +479,21 @@ i32[10](0);
         (array_rank_specifier
           (decimal_integer_literal))
         (group_expression
+          (decimal_integer_literal))))))
+
+=================================================================================
+object creation expression
+=================================================================================
+
+Point(3, 4);
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (call_expression
+        (identifier)
+        (group_expression
+          (decimal_integer_literal)
           (decimal_integer_literal))))))

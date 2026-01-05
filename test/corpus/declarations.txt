@@ -50,10 +50,9 @@ group declaration
   (compound_statement
     (variable_declaration
       (inferred_variable_declaration
-        (variable_declarator_id
-          (group_expression
-            (identifier)
-            (identifier)))
+        (group_expression
+          (identifier)
+          (identifier))
         (identifier))))
   (simple_statement))
 
@@ -76,16 +75,22 @@ enum MyEnum:
     (enum_declaration
       (identifier)
       (enum_body
-        (identifier)
-        (identifier)
-        (identifier))))
+        (enum_constant
+          (identifier))
+        (enum_constant
+          (identifier))
+        (enum_constant
+          (identifier)))))
   (compound_statement
     (enum_declaration
       (identifier)
       (enum_body
-        (identifier)
-        (identifier)
-        (identifier)))))
+        (enum_constant
+          (identifier))
+        (enum_constant
+          (identifier))
+        (enum_constant
+          (identifier))))))
 
 =================================================================================
 function declaration
@@ -107,7 +112,7 @@ def main() -> void:
       (block
         (simple_statement
           (expression_statement
-            (function_invocation
+            (call_expression
               (identifier)
               (group_expression
                 (string_literal))))))))
@@ -119,7 +124,7 @@ def main() -> void:
       (block
         (simple_statement
           (expression_statement
-            (function_invocation
+            (call_expression
               (identifier)
               (group_expression
                 (string_literal)))))))))
@@ -136,10 +141,11 @@ test "succeeds":
 (flint_file
   (compound_statement
     (test_declaration
+      (string_literal)
       (block
         (simple_statement
           (expression_statement
-            (function_invocation
+            (call_expression
               (identifier)
               (group_expression
                 (true)))))))))

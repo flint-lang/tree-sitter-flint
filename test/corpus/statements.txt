@@ -177,11 +177,10 @@ for i32 i, i32 idx in iterable:
       (block
         (simple_statement
           (expression_statement
-            (function_invocation
+            (call_expression
               (identifier)
               (group_expression
-                (string_literal
-                  (interpolated_string_literal))))))))))
+                (interpolated_string_literal)))))))))
 
 =================================================================================
 group assignment
@@ -212,7 +211,7 @@ fn.call() catch(e):
 (flint_file
   (compound_statement
     (catch_statement
-      (function_invocation
+      (call_expression
         (field_access
           (identifier)
           (identifier))
@@ -253,7 +252,7 @@ print("Hello, World");
 (flint_file
   (simple_statement
     (expression_statement
-      (function_invocation
+      (call_expression
         (identifier)
         (group_expression
           (string_literal))))))

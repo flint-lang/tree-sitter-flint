@@ -1,0 +1,99 @@
+use Core.print
+// <- keyword
+
+expr;
+// <- variable
+//  ^ punctuation.delimiter
+
+def main(i32 a):
+//   ^ function
+//           ^ variable
+    print();
+//   ^ function
+//       ^ punctuation.bracket
+
+expr + expr;
+//   ^ operator
+
+enum MyEnum:
+//    ^ enum
+    Red, Blue, Green;
+//   ^ constant
+
+Point x;
+// <- type
+
+Point(3, 4);
+// <- constructor
+
+Point.x;
+// <- type
+//    ^ property
+//   ^ punctuation.delimiter
+
+point.x;
+// <- variable
+//    ^ property
+
+CONSTANT;
+// <- constant
+
+'a';
+// <- string
+
+"Escaped \n";
+//        ^ string.escape
+
+"string";
+// <- string
+
+$"interpolated {x}"
+// <- string
+
+42;
+// <- number
+
+.3f;
+// <- number
+
+true;
+// <- boolean
+
+false;
+// <- boolean
+
+none;
+// <- constant.builtin
+
+_;
+// <- constant.builtin
+
+if expr:
+// <- keyword
+    x;
+else:
+// <- keyword
+    y;
+
+switch expr:
+// <- keyword
+    RED -> x;
+
+for i32 i in x:
+// <- keyword
+    y;
+
+do:
+// <- keyword
+    x;
+while expr;
+// <- keyword
+
+break;
+// <- keyword
+
+continue;
+// <- keyword
+
+// comment
+// <- comment
