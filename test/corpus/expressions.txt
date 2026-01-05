@@ -4,7 +4,6 @@ standalone assignment expression
 
 x = 3;
 y = "Hello";
-z := 3.14;
 ---
 
 (flint_file
@@ -17,12 +16,7 @@ z := 3.14;
     (expression_statement
       (assignment_expression
         (identifier)
-        (string_literal))))
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (identifier)
-        (decimal_floating_point_literal)))))
+        (string_literal)))))
 
 =================================================================================
 standalone array assignment expression
@@ -152,8 +146,8 @@ print("Hello, World!");
 (flint_file
   (simple_statement
     (expression_statement
-      (call
-        (type_identifier)
+      (function_invocation
+        (identifier)
         (group_expression
           (string_literal))))))
 
@@ -220,8 +214,8 @@ obj(param);
 (flint_file
   (simple_statement
     (expression_statement
-      (call
-        (type_identifier)
+      (function_invocation
+        (identifier)
         (group_expression
           (identifier))))))
 
@@ -301,13 +295,13 @@ i32(4.3f);
 (flint_file
   (simple_statement
     (expression_statement
-      (call
-        (type_identifier)
+      (function_invocation
+        (identifier)
         (group_expression
           (decimal_integer_literal)))))
   (simple_statement
     (expression_statement
-      (call
+      (function_invocation
         (integral_type)
         (group_expression
           (decimal_floating_point_literal))))))
@@ -486,21 +480,3 @@ i32[10](0);
           (decimal_integer_literal))
         (group_expression
           (decimal_integer_literal))))))
-
-=================================================================================
-if statement
-=================================================================================
-
-if x:
-    y;
-
----
-
-(flint_file
-  (compound_statement
-    (if_statement
-      (identifier)
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier)))))))

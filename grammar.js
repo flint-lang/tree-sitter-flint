@@ -182,7 +182,13 @@ export default grammar({
         seq(
           field(
             "left",
-            choice($.identifier, $.field_access, $.array_access_expression),
+            choice(
+              $.identifier,
+              $.field_access,
+              $.array_access_expression,
+              $.group_expression,
+              $.grouped_field_access,
+            ),
           ),
           field("operator", choice("=", "+=", "-=", "*=", "/=")),
           field("right", $.expression),
@@ -259,7 +265,6 @@ export default grammar({
         $.function_invocation,
         $.group_expression,
         $.grouped_field_access,
-        $.call,
         $.optional_chain,
         $.unwrap,
         $.extraction,
@@ -288,7 +293,7 @@ export default grammar({
         PREC.UNARY,
         seq(
           choice(
-            field("name", $.primary_expression),
+            field("name", choice($.primary_expression, $._simple_type)),
             // Different invocations, e.g. with generic types can be added here
           ),
           field("arguments", $.group_expression),
@@ -314,9 +319,6 @@ export default grammar({
           field("group", $.group_expression),
         ),
       ),
-
-    call: ($) =>
-      seq(field("type", $._simple_type), field("values", $.group_expression)),
 
     optional_chain: ($) =>
       prec(
@@ -362,8 +364,8 @@ export default grammar({
         1,
         seq(
           choice($.identifier, $._literal),
-          "->",
-          choice($.expression_statement, $.block, $.throw_statement),
+          choice("->", ":"),
+          choice($.expression_statement, $._suite, $.throw_statement),
         ),
       ),
 
@@ -375,7 +377,7 @@ export default grammar({
 
     clause: ($) => choice($.use_clause),
 
-    use_clause: ($) => seq("use", $._name),
+    use_clause: ($) => seq("use", choice($._name, $._string_literal)),
 
     // =================================================================
     // Statements
@@ -384,9 +386,17 @@ export default grammar({
     statement: ($) => choice($.simple_statement, $.compound_statement),
 
     simple_statement: ($) =>
-      choice($.expression_statement, $.break_statement, ";", $.throw_statement),
+      choice(
+        $.expression_statement,
+        $.break_statement,
+        ";",
+        $.throw_statement,
+        $.return_statement,
+      ),
 
     break_statement: ($) => seq("break", ";"),
+
+    return_statement: ($) => seq("return", $.expression, ";"),
 
     expression_statement: ($) => seq($.expression, ";"),
 
@@ -404,6 +414,7 @@ export default grammar({
         $.do_statement,
         $.while_statement,
         $.enhanced_for_statement,
+        $.catch_statement,
       ),
 
     if_statement: ($) =>
@@ -462,6 +473,15 @@ export default grammar({
         field("body", $._suite),
       ),
 
+    catch_statement: ($) =>
+      seq(
+        $.function_invocation,
+        "catch",
+        $.group_expression,
+        ":",
+        field("body", $._suite),
+      ),
+
     // =================================================================
     // Declarations
     // =================================================================
@@ -473,6 +493,7 @@ export default grammar({
           $.enum_declaration,
           $.variable_declaration,
           $.function_declaration,
+          $.test_declaration,
         ),
         // TODO: Add declarations
       ),
@@ -504,15 +525,19 @@ export default grammar({
       ),
 
     _variable_declarator_id: ($) =>
-      field("name", choice($.identifier, $.default_val)),
+      field("name", choice($.identifier, $.default_val, $.group_expression)),
 
     _variable_initializer: ($) => $.expression,
+
+    test_declaration: ($) =>
+      seq("test", $._string_literal, ":", field("body", $._suite)),
 
     function_declaration: ($) =>
       seq(
         "def",
         field("name", $.identifier),
         field("parameters", $.parameters),
+        optional(seq("->", field("return_type", $._type))),
         ":",
         field("body", $._suite),
       ),
@@ -521,7 +546,11 @@ export default grammar({
       seq(
         "(",
         sep(
-          seq(field("type", $._unannotated_type), $._variable_declarator_id),
+          seq(
+            optional("mut"),
+            field("type", $._unannotated_type),
+            $._variable_declarator_id,
+          ),
           ",",
         ),
         ")",

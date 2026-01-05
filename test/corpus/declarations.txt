@@ -36,6 +36,24 @@ inferred := i32[10](0);
   (simple_statement))
 
 =================================================================================
+group declaration
+=================================================================================
+
+(x, y)  := expr;
+
+---
+
+(flint_file
+  (compound_statement
+    (variable_declaration
+      (inferred_variable_declaration
+        (group_expression
+          (identifier)
+          (identifier))
+        (identifier))))
+  (simple_statement))
+
+=================================================================================
 enum declaration
 =================================================================================
 
@@ -72,6 +90,9 @@ function declaration
 def main():
     print("Hello, World");
 
+def main() -> void:
+    print("Hi");
+
 ---
 
 (flint_file
@@ -82,7 +103,39 @@ def main():
       (block
         (simple_statement
           (expression_statement
-            (call
-              (type_identifier)
+            (function_invocation
+              (identifier)
+              (group_expression
+                (string_literal))))))))
+  (compound_statement
+    (function_declaration
+      (identifier)
+      (parameters)
+      (void_type)
+      (block
+        (simple_statement
+          (expression_statement
+            (function_invocation
+              (identifier)
               (group_expression
                 (string_literal)))))))))
+
+=================================================================================
+test declaration
+=================================================================================
+
+test "succeeds":
+    assert(true);
+
+---
+
+(flint_file
+  (compound_statement
+    (test_declaration
+      (block
+        (simple_statement
+          (expression_statement
+            (function_invocation
+              (identifier)
+              (group_expression
+                (true)))))))))

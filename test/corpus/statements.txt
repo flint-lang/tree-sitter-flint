@@ -101,3 +101,277 @@ while y;
           (expression_statement
             (identifier))))
       (identifier))))
+
+=================================================================================
+while statement
+=================================================================================
+
+while x:
+    y;
+    z;
+
+---
+
+(flint_file
+  (compound_statement
+    (while_statement
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier)))
+        (simple_statement
+          (expression_statement
+            (identifier)))))))
+
+=================================================================================
+enhanced for statement
+=================================================================================
+
+for i32 i in iterable:
+    x;
+
+for i32 i, _ in iterable:
+    x;
+    y;
+
+for i32 i, i32 idx in iterable:
+    print($"i is {i} at index {idx}");
+
+---
+
+(flint_file
+  (compound_statement
+    (enhanced_for_statement
+      (integral_type)
+      (identifier)
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier))))))
+  (compound_statement
+    (enhanced_for_statement
+      (integral_type)
+      (identifier)
+      (default_val)
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier)))
+        (simple_statement
+          (expression_statement
+            (identifier))))))
+  (compound_statement
+    (enhanced_for_statement
+      (integral_type)
+      (identifier)
+      (integral_type)
+      (identifier)
+      (identifier)
+      (block
+        (simple_statement
+          (expression_statement
+            (function_invocation
+              (identifier)
+              (group_expression
+                (string_literal)))))))))
+
+=================================================================================
+group assignment
+=================================================================================
+
+(a, b) = expr;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (group_expression
+          (identifier)
+          (identifier))
+        (identifier)))))
+
+=================================================================================
+catch statement
+=================================================================================
+
+func.call() catch(e):
+    e;
+
+---
+
+(flint_file
+  (compound_statement
+    (catch_statement
+      (function_invocation
+        (field_access
+          (identifier)
+          (identifier))
+        (group_expression))
+      (group_expression
+        (identifier))
+      (block
+        (simple_statement
+          (expression_statement
+            (identifier)))))))
+
+=================================================================================
+array assignment
+=================================================================================
+
+arr[expr] = expr;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (array_access_expression
+          (identifier)
+          (array_rank_specifier
+            (identifier)))
+        (identifier)))))
+
+=================================================================================
+function invocation
+=================================================================================
+
+print("Hello, World");
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (function_invocation
+        (identifier)
+        (group_expression
+          (string_literal))))))
+
+=================================================================================
+data field assignment
+=================================================================================
+
+x.y = z;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (field_access
+          (identifier)
+          (identifier))
+        (identifier)))))
+
+=================================================================================
+grouped field assignment
+=================================================================================
+
+a.(b, c) = expr;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (grouped_field_access
+          (identifier)
+          (group_expression
+            (identifier)
+            (identifier)))
+        (identifier)))))
+
+=================================================================================
+return statement
+=================================================================================
+
+return x;
+
+---
+
+(flint_file
+  (simple_statement
+    (return_statement
+      (identifier))))
+
+=================================================================================
+stacked array assignment
+=================================================================================
+
+expr[2, 2] = 4;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (array_access_expression
+          (identifier)
+          (array_rank_specifier
+            (decimal_integer_literal)
+            (decimal_integer_literal)))
+        (decimal_integer_literal)))))
+
+=================================================================================
+stacked group assignment
+=================================================================================
+
+a.(b, c) = d;
+
+---
+
+(flint_file
+  (simple_statement
+    (expression_statement
+      (assignment_expression
+        (grouped_field_access
+          (identifier)
+          (group_expression
+            (identifier)
+            (identifier)))
+        (identifier)))))
+
+=================================================================================
+switch statement
+=================================================================================
+
+switch e:
+    a:
+        x;
+        break;
+    b:
+        y;
+        break;
+
+---
+
+(flint_file
+  (compound_statement
+    (switch_expression
+      (identifier)
+      (block
+        (switch_rule
+          (identifier)
+          (block
+            (simple_statement
+              (expression_statement
+                (identifier)))
+            (simple_statement
+              (break_statement))))
+        (switch_rule
+          (identifier)
+          (block
+            (simple_statement
+              (expression_statement
+                (identifier)))
+            (simple_statement
+              (break_statement))))))))
