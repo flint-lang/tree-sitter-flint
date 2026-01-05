@@ -1,0 +1,57 @@
+use Core.print
+// <- keyword
+//  ^ variable
+//      ^ variable
+
+enum Color:
+// <- keyword
+//   ^ type
+    Red, Green, Blue;
+//  ^ constant
+//       ^ constant
+//              ^ constant
+
+def main(str[] args):
+// <- keyword
+//  ^ function
+//       ^ variable.parameter
+//             ^ punctuation.bracket
+//              ^ type.builtin
+//                 ^ punctuation.bracket
+//                   ^ punctuation.delimiter
+    mut x := 10;
+//  ^ keyword
+//      ^ variable
+//        ^ operator
+//           ^ number
+//             ^ punctuation.delimiter
+
+    if x > 5:
+//  ^ keyword
+//     ^ variable
+//       ^ operator
+//         ^ number
+//          ^ punctuation.delimiter
+        print($"Value: {x}");
+//      ^ function
+//            ^ string
+//             ^ punctuation.special
+//                     ^ punctuation.special
+//                      ^ variable
+//                        ^ punctuation.special
+//                         ^ string
+
+    let p = Point(1.5, 2.0);
+//      ^ variable
+//          ^ function
+//                ^ number
+//                     ^ number
+
+    p.x += 1;
+//  ^ variable
+//    ^ property
+//      ^ operator
+//         ^ number
+
+    return;
+//  ^ keyword

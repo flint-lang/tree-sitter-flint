@@ -144,7 +144,8 @@ for i32 i, i32 idx in iterable:
   (compound_statement
     (enhanced_for_statement
       (integral_type)
-      (identifier)
+      (variable_declarator_id
+        (identifier))
       (identifier)
       (block
         (simple_statement
@@ -153,7 +154,8 @@ for i32 i, i32 idx in iterable:
   (compound_statement
     (enhanced_for_statement
       (integral_type)
-      (identifier)
+      (variable_declarator_id
+        (identifier))
       (default_val)
       (identifier)
       (block
@@ -166,9 +168,11 @@ for i32 i, i32 idx in iterable:
   (compound_statement
     (enhanced_for_statement
       (integral_type)
-      (identifier)
+      (variable_declarator_id
+        (identifier))
       (integral_type)
-      (identifier)
+      (variable_declarator_id
+        (identifier))
       (identifier)
       (block
         (simple_statement
@@ -176,7 +180,8 @@ for i32 i, i32 idx in iterable:
             (function_invocation
               (identifier)
               (group_expression
-                (string_literal)))))))))
+                (string_literal
+                  (interpolated_string_literal))))))))))
 
 =================================================================================
 group assignment
@@ -199,7 +204,7 @@ group assignment
 catch statement
 =================================================================================
 
-func.call() catch(e):
+fn.call() catch(e):
     e;
 
 ---

@@ -296,7 +296,7 @@ i32(4.3f);
   (simple_statement
     (expression_statement
       (function_invocation
-        (identifier)
+        (str_type)
         (group_expression
           (decimal_integer_literal)))))
   (simple_statement
@@ -321,7 +321,7 @@ expr?(custom);
       (extraction
         (identifier)
         (group_expression
-          (identifier)))))
+          (str_type)))))
   (simple_statement
     (expression_statement
       (extraction
@@ -344,7 +344,7 @@ expr!(custom);
       (unwrap
         (identifier)
         (group_expression
-          (identifier)))))
+          (str_type)))))
   (simple_statement
     (expression_statement
       (unwrap

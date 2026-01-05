@@ -130,10 +130,12 @@ $"Actually {x} interpolated string";
       (string_literal)))
   (simple_statement
     (expression_statement
-      (string_literal)))
+      (string_literal
+        (interpolated_string_literal))))
   (simple_statement
     (expression_statement
-      (string_literal)))
+      (string_literal
+        (interpolated_string_literal))))
   (simple_statement
     (expression_statement
       (string_literal

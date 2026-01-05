@@ -69,7 +69,6 @@ export default grammar({
   // =================================================================
 
   conflicts: ($) => [
-    [$._simple_type, $.primary_expression],
     [$.compound_statement, $.expression],
     [$.primary_expression, $.scoped_identifier],
     [$.array_creation_expression, $._unannotated_type],
@@ -126,9 +125,9 @@ export default grammar({
       token(seq("'", choice(/[^\\'\n]/, /\\./, /\\\n/), "'")),
 
     string_literal: ($) =>
-      choice($._string_literal, $._interpolated_string_literal),
+      choice($._string_literal, $.interpolated_string_literal),
 
-    _interpolated_string_literal: ($) =>
+    interpolated_string_literal: ($) =>
       seq(
         '$"',
         repeat(
@@ -286,7 +285,8 @@ export default grammar({
         ),
       ),
 
-    group_expression: ($) => seq("(", sep($.expression, ","), ")"),
+    group_expression: ($) =>
+      seq("(", sep(choice($.expression, $._simple_type), ","), ")"),
 
     function_invocation: ($) =>
       prec(
@@ -383,7 +383,8 @@ export default grammar({
     // Statements
     // =================================================================
 
-    statement: ($) => choice($.simple_statement, $.compound_statement),
+    statement: ($) =>
+      choice($.simple_statement, $.compound_statement, $.reserved),
 
     simple_statement: ($) =>
       choice(
@@ -462,7 +463,7 @@ export default grammar({
         "for",
         sep1(
           choice(
-            seq(field("type", $._unannotated_type), $._variable_declarator_id),
+            seq(field("type", $._unannotated_type), $.variable_declarator_id),
             $.default_val,
           ),
           ",",
@@ -514,25 +515,30 @@ export default grammar({
       seq(
         field("type", $._unannotated_type),
         optional("mut"),
-        $._variable_declarator_id,
+        $.variable_declarator_id,
         optional(seq("=", field("value", $._variable_initializer))),
       ),
 
     inferred_variable_declaration: ($) =>
       seq(
         optional("mut"),
-        $._variable_declarator_id,
+        $.variable_declarator_id,
         ":=",
         field("value", $._variable_initializer),
       ),
 
-    _variable_declarator_id: ($) =>
+    variable_declarator_id: ($) =>
       field("name", choice($.identifier, $.default_val, $.group_expression)),
 
     _variable_initializer: ($) => $.expression,
 
     test_declaration: ($) =>
-      seq("test", $._string_literal, ":", field("body", $._suite)),
+      seq(
+        "test",
+        field("name", $._string_literal),
+        ":",
+        field("body", $._suite),
+      ),
 
     function_declaration: ($) =>
       seq(
@@ -551,7 +557,7 @@ export default grammar({
           seq(
             optional("mut"),
             field("type", $._unannotated_type),
-            $._variable_declarator_id,
+            $.variable_declarator_id,
           ),
           ",",
         ),
@@ -577,8 +583,8 @@ export default grammar({
         $.bool_type,
         $.void_type,
         $.str_type,
-        alias($.identifier, $.type_identifier),
-        $.scoped_identifier,
+        prec(-1, alias($.identifier, $.type_identifier)),
+        prec(-1, $.scoped_identifier),
       ),
 
     array_type: ($) =>
@@ -657,6 +663,33 @@ export default grammar({
       ),
 
     dotted_name: ($) => prec(1, sep1($.identifier, ".")),
+
+    reserved: (_) =>
+      choice(
+        "aligned",
+        "as",
+        "async",
+        "const",
+        "continue",
+        "data",
+        "entity",
+        "error",
+        "export",
+        "extends",
+        "extern",
+        "func",
+        "hook",
+        "link",
+        "lock",
+        "parallel",
+        "persistent",
+        "requires",
+        "shared",
+        "spawn",
+        "sync",
+        "type",
+        "variant",
+      ),
 
     // =================================================================
     // Comments

@@ -13,20 +13,23 @@ inferred := i32[10](0);
     (variable_declaration
       (typed_variable_declaration
         (integral_type)
-        (identifier)
+        (variable_declarator_id
+          (identifier))
         (decimal_integer_literal))))
   (simple_statement)
   (compound_statement
     (variable_declaration
       (typed_variable_declaration
-        (type_identifier)
-        (identifier)
+        (str_type)
+        (variable_declarator_id
+          (identifier))
         (string_literal))))
   (simple_statement)
   (compound_statement
     (variable_declaration
       (inferred_variable_declaration
-        (identifier)
+        (variable_declarator_id
+          (identifier))
         (array_creation_expression
           (integral_type)
           (array_rank_specifier
@@ -47,9 +50,10 @@ group declaration
   (compound_statement
     (variable_declaration
       (inferred_variable_declaration
-        (group_expression
-          (identifier)
-          (identifier))
+        (variable_declarator_id
+          (group_expression
+            (identifier)
+            (identifier)))
         (identifier))))
   (simple_statement))
 
