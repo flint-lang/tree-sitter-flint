@@ -2661,6 +2661,10 @@
           "name": "void_type"
         },
         {
+          "type": "SYMBOL",
+          "name": "str_type"
+        },
+        {
           "type": "ALIAS",
           "content": {
             "type": "SYMBOL",
@@ -2883,6 +2887,10 @@
     "void_type": {
       "type": "STRING",
       "value": "void"
+    },
+    "str_type": {
+      "type": "STRING",
+      "value": "str"
     },
     "_name": {
       "type": "CHOICE",

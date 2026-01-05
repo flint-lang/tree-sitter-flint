@@ -576,6 +576,7 @@ export default grammar({
         $.floating_point_type,
         $.bool_type,
         $.void_type,
+        $.str_type,
         alias($.identifier, $.type_identifier),
         $.scoped_identifier,
       ),
@@ -626,6 +627,7 @@ export default grammar({
 
     bool_type: (_) => "bool",
     void_type: (_) => "void",
+    str_type: (_) => "str",
 
     // =================================================================
     // Inline

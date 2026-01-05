@@ -58,6 +58,10 @@
         "named": true
       },
       {
+        "type": "str_type",
+        "named": true
+      },
+      {
         "type": "type_identifier",
         "named": true
       },
@@ -1814,6 +1818,10 @@
   {
     "type": "return",
     "named": false
+  },
+  {
+    "type": "str_type",
+    "named": true
   },
   {
     "type": "switch",
