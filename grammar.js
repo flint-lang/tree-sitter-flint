@@ -1,7 +1,7 @@
 /**
  * @file Tree Sitter grammar for the Flint programming language
  * @author Julius Grünberg <ghastcrafthd@troense.de>
- * @license Apache-2.0
+ * @license MIT
  */
 
 /// <reference types="tree-sitter-cli/dsl" />
