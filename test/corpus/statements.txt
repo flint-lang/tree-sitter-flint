@@ -6,9 +6,8 @@ break;
 
 ---
 
-(flint_file
-  (simple_statement
-    (break_statement)))
+(file
+  (break_statement))
 
 =================================================================================
 expression statement
@@ -18,13 +17,12 @@ arr[3];
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (array_access_expression
-        (identifier)
-        (array_rank_specifier
-          (decimal_integer_literal))))))
+(file
+  (expression_statement
+    (array_access_expression
+      (identifier)
+      (array_rank_specifier
+        (integer_literal)))))
 
 =================================================================================
 throw statement
@@ -34,11 +32,9 @@ throw x;
 
 ---
 
-(flint_file
-  (simple_statement
-    (throw_statement
-      (identifier)))
-  (simple_statement))
+(file
+  (throw_statement
+    (identifier)))
 
 =================================================================================
 if statement
@@ -56,32 +52,26 @@ else:
 
 ---
 
-(flint_file
-  (compound_statement
-    (if_statement
+(file
+  (if_statement
+    (identifier)
+    (block
+      (expression_statement
+        (identifier))))
+  (if_statement
+    (identifier)
+    (block
+      (expression_statement
+        (identifier)))
+    (else_if_clause
       (identifier)
       (block
-        (simple_statement
-          (expression_statement
-            (identifier))))))
-  (compound_statement
-    (if_statement
-      (identifier)
+        (expression_statement
+          (identifier))))
+    (else_clause
       (block
-        (simple_statement
-          (expression_statement
-            (identifier))))
-      (else_if_clause
-        (identifier)
-        (block
-          (simple_statement
-            (expression_statement
-              (identifier)))))
-      (else_clause
-        (block
-          (simple_statement
-            (expression_statement
-              (identifier))))))))
+        (expression_statement
+          (identifier))))))
 
 =================================================================================
 do statement
@@ -93,14 +83,12 @@ while y;
 
 ---
 
-(flint_file
-  (compound_statement
-    (do_statement
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier))))
-      (identifier))))
+(file
+  (do_statement
+    (block
+      (expression_statement
+        (identifier)))
+    (identifier)))
 
 =================================================================================
 while statement
@@ -112,17 +100,14 @@ while x:
 
 ---
 
-(flint_file
-  (compound_statement
-    (while_statement
-      (identifier)
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier)))
-        (simple_statement
-          (expression_statement
-            (identifier)))))))
+(file
+  (while_statement
+    (identifier)
+    (block
+      (expression_statement
+        (identifier))
+      (expression_statement
+        (identifier)))))
 
 =================================================================================
 enhanced for statement
@@ -140,47 +125,40 @@ for i32 i, i32 idx in iterable:
 
 ---
 
-(flint_file
-  (compound_statement
-    (enhanced_for_statement
+(file
+  (enhanced_for_statement
+    (typed_variable_declarator
       (integral_type)
-      (variable_declarator_id
-        (identifier))
-      (identifier)
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier))))))
-  (compound_statement
-    (enhanced_for_statement
+      (identifier))
+    (identifier)
+    (block
+      (expression_statement
+        (identifier))))
+  (enhanced_for_statement
+    (typed_variable_declarator
       (integral_type)
-      (variable_declarator_id
+      (identifier))
+    (default_val)
+    (identifier)
+    (block
+      (expression_statement
         (identifier))
-      (default_val)
-      (identifier)
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier)))
-        (simple_statement
-          (expression_statement
-            (identifier))))))
-  (compound_statement
-    (enhanced_for_statement
+      (expression_statement
+        (identifier))))
+  (enhanced_for_statement
+    (typed_variable_declarator
       (integral_type)
-      (variable_declarator_id
-        (identifier))
+      (identifier))
+    (typed_variable_declarator
       (integral_type)
-      (variable_declarator_id
-        (identifier))
-      (identifier)
-      (block
-        (simple_statement
-          (expression_statement
-            (call_expression
-              (identifier)
-              (group_expression
-                (interpolated_string_literal)))))))))
+      (identifier))
+    (identifier)
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (interpolated_string_literal)))))))
 
 =================================================================================
 group assignment
@@ -190,14 +168,13 @@ group assignment
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (group_expression
-          (identifier)
-          (identifier))
-        (identifier)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (group_expression
+        (type_identifier)
+        (type_identifier))
+      (identifier))))
 
 =================================================================================
 catch statement
@@ -208,20 +185,18 @@ fn.call() catch(e):
 
 ---
 
-(flint_file
-  (compound_statement
-    (catch_statement
-      (call_expression
-        (field_access
-          (identifier)
-          (identifier))
-        (group_expression))
-      (group_expression
+(file
+  (catch_statement
+    (call_expression
+      (field_access
+        (identifier)
         (identifier))
-      (block
-        (simple_statement
-          (expression_statement
-            (identifier)))))))
+      (argument_list))
+    (group_expression
+      (identifier))
+    (block
+      (expression_statement
+        (identifier)))))
 
 =================================================================================
 array assignment
@@ -231,15 +206,14 @@ arr[expr] = expr;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (array_access_expression
-          (identifier)
-          (array_rank_specifier
-            (identifier)))
-        (identifier)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (array_access_expression
+        (identifier)
+        (array_rank_specifier
+          (identifier)))
+      (identifier))))
 
 =================================================================================
 function invocation
@@ -249,13 +223,12 @@ print("Hello, World");
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (identifier)
-        (group_expression
-          (string_literal))))))
+(file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (argument_list
+        (string_literal)))))
 
 =================================================================================
 data field assignment
@@ -265,14 +238,13 @@ x.y = z;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (field_access
-          (identifier)
-          (identifier))
-        (identifier)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (identifier))))
 
 =================================================================================
 grouped field assignment
@@ -282,16 +254,15 @@ a.(b, c) = expr;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (grouped_field_access
-          (identifier)
-          (group_expression
-            (identifier)
-            (identifier)))
-        (identifier)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (grouped_field_access
+        (identifier)
+        (group_expression
+          (type_identifier)
+          (type_identifier)))
+      (identifier))))
 
 =================================================================================
 return statement
@@ -301,10 +272,9 @@ return x;
 
 ---
 
-(flint_file
-  (simple_statement
-    (return_statement
-      (identifier))))
+(file
+  (return_statement
+    (identifier)))
 
 =================================================================================
 stacked array assignment
@@ -314,16 +284,15 @@ expr[2, 2] = 4;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (array_access_expression
-          (identifier)
-          (array_rank_specifier
-            (decimal_integer_literal)
-            (decimal_integer_literal)))
-        (decimal_integer_literal)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (array_access_expression
+        (identifier)
+        (array_rank_specifier
+          (integer_literal)
+          (integer_literal)))
+      (integer_literal))))
 
 =================================================================================
 stacked group assignment
@@ -333,16 +302,15 @@ a.(b, c) = d;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (grouped_field_access
-          (identifier)
-          (group_expression
-            (identifier)
-            (identifier)))
-        (identifier)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (grouped_field_access
+        (identifier)
+        (group_expression
+          (type_identifier)
+          (type_identifier)))
+      (identifier))))
 
 =================================================================================
 switch statement
@@ -358,24 +326,19 @@ switch e:
 
 ---
 
-(flint_file
-  (compound_statement
-    (switch_expression
-      (identifier)
-      (block
-        (switch_rule
-          (identifier)
-          (block
-            (simple_statement
-              (expression_statement
-                (identifier)))
-            (simple_statement
-              (break_statement))))
-        (switch_rule
-          (identifier)
-          (block
-            (simple_statement
-              (expression_statement
-                (identifier)))
-            (simple_statement
-              (break_statement))))))))
+(file
+  (switch_expression
+    (identifier)
+    (block
+      (switch_rule
+        (identifier)
+        (block
+          (expression_statement
+            (identifier))
+          (break_statement)))
+      (switch_rule
+        (identifier)
+        (block
+          (expression_statement
+            (identifier))
+          (break_statement))))))

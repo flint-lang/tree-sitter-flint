@@ -55,7 +55,6 @@ export default grammar({
     $.statement,
     $._literal,
     $._type,
-    $._simple_type,
     $._unannotated_type,
   ],
 
@@ -69,10 +68,12 @@ export default grammar({
   // =================================================================
 
   conflicts: ($) => [
-    [$.compound_statement, $.expression],
+    [$._compound_statement, $.expression],
     [$.primary_expression, $.scoped_identifier],
-    [$.array_creation_expression, $._unannotated_type],
     [$.expression, $.call_expression],
+    [$.primary_expression, $._simple_type],
+    [$._variable_declarator_id, $._simple_type],
+    [$.array_creation_expression, $.array_type],
   ],
 
   // =================================================================
@@ -87,7 +88,7 @@ export default grammar({
     // Top Level
     // =================================================================
 
-    flint_file: ($) => repeat($._toplevel_statement),
+    file: ($) => repeat($._toplevel_statement),
 
     _toplevel_statement: ($) => choice($.statement, $.clause),
 
@@ -97,8 +98,8 @@ export default grammar({
 
     _literal: ($) =>
       choice(
-        $.decimal_integer_literal,
-        $.decimal_floating_point_literal,
+        $.integer_literal,
+        $.float_literal,
         $.true,
         $.false,
         $.none,
@@ -107,9 +108,9 @@ export default grammar({
         $._string_literal,
       ),
 
-    decimal_integer_literal: (_) => token(seq(DIGITS)),
+    integer_literal: (_) => token(seq(DIGITS)),
 
-    decimal_floating_point_literal: (_) =>
+    float_literal: (_) =>
       token(
         choice(
           seq(DECIMAL_DIGITS, ".", DECIMAL_DIGITS, optional(/[fFdD]/)),
@@ -270,30 +271,33 @@ export default grammar({
     array_access_expression: ($) =>
       prec(
         PREC.ARRAY,
-        seq(field("array", $.primary_expression), $.array_rank_specifier),
+        seq(field("array", $._variable_declarator_id), $.array_rank_specifier),
       ),
 
     array_creation_expression: ($) =>
       prec.right(
         seq(
-          field("type", $._simple_type),
+          field("type", $._unannotated_type),
           $.array_rank_specifier,
-          $.group_expression,
+          $.argument_list,
         ),
       ),
 
     group_expression: ($) =>
       seq(
         "(",
-        sep(field("group_member", choice($.expression, $._simple_type)), ","),
+        sep(
+          field("group_member", choice($.expression, $._unannotated_type)),
+          ",",
+        ),
         ")",
       ),
 
     call_expression: ($) =>
       seq(
-        field("name", choice($.primary_expression, $._simple_type)),
+        field("name", choice($.primary_expression, $._unannotated_type)),
 
-        field("arguments", $.group_expression),
+        field("arguments", $.argument_list),
       ),
 
     field_access: ($) =>
@@ -380,9 +384,9 @@ export default grammar({
     // =================================================================
 
     statement: ($) =>
-      choice($.simple_statement, $.compound_statement, $.reserved),
+      choice($._simple_statement, $._compound_statement, $.reserved),
 
-    simple_statement: ($) =>
+    _simple_statement: ($) =>
       choice(
         $.expression_statement,
         $.break_statement,
@@ -403,7 +407,7 @@ export default grammar({
     // Compound Statements
     // =================================================================
 
-    compound_statement: ($) =>
+    _compound_statement: ($) =>
       choice(
         $.declaration,
         $.if_statement,
@@ -457,13 +461,7 @@ export default grammar({
     enhanced_for_statement: ($) =>
       seq(
         "for",
-        sep1(
-          choice(
-            seq(field("type", $._unannotated_type), $.variable_declarator_id),
-            $.default_val,
-          ),
-          ",",
-        ),
+        sep1(choice($.typed_variable_declarator, $.default_val), ","),
         "in",
         field("value", $.expression),
         ":",
@@ -513,25 +511,29 @@ export default grammar({
       ),
 
     variable_declaration: ($) =>
-      choice($.typed_variable_declaration, $.inferred_variable_declaration),
+      seq(
+        optional("mut"),
+        field(
+          "declarator",
+          choice($.typed_variable_declarator, $.inferred_variable_declarator),
+        ),
+      ),
 
-    typed_variable_declaration: ($) =>
+    typed_variable_declarator: ($) =>
       seq(
         field("type", $._unannotated_type),
-        optional("mut"),
-        $.variable_declarator_id,
+        $._variable_declarator_id,
         optional(seq("=", field("value", $._variable_initializer))),
       ),
 
-    inferred_variable_declaration: ($) =>
+    inferred_variable_declarator: ($) =>
       seq(
-        optional("mut"),
-        choice($.variable_declarator_id, $.group_expression),
+        choice($._variable_declarator_id, $.group_expression),
         ":=",
         field("value", $._variable_initializer),
       ),
 
-    variable_declarator_id: ($) =>
+    _variable_declarator_id: ($) =>
       field("name", choice($.identifier, $.default_val)),
 
     _variable_initializer: ($) => $.expression,
@@ -560,7 +562,7 @@ export default grammar({
       seq(
         optional("mut"),
         field("type", $._unannotated_type),
-        $.variable_declarator_id,
+        field("name", $._variable_declarator_id),
       ),
 
     // =================================================================
@@ -577,13 +579,13 @@ export default grammar({
 
     _simple_type: ($) =>
       choice(
-        $.integral_type,
-        $.floating_point_type,
-        $.bool_type,
-        $.void_type,
-        $.str_type,
-        prec(-1, alias($.identifier, $.type_identifier)),
-        prec(-1, $.scoped_identifier),
+        prec(1, $.integral_type),
+        prec(1, $.floating_point_type),
+        prec(1, $.bool_type),
+        prec(1, $.void_type),
+        prec(1, $.str_type),
+        alias($.identifier, $.type_identifier),
+        $.scoped_identifier,
       ),
 
     array_type: ($) =>
@@ -593,7 +595,7 @@ export default grammar({
       ),
 
     array_rank_specifier: ($) =>
-      seq("[", sep(optional($.expression), ","), "]"),
+      seq("[", sep(field("rank", optional($.expression)), ","), "]"),
 
     integral_type: ($) =>
       choice(
@@ -654,9 +656,12 @@ export default grammar({
     // Util
     // =================================================================
 
+    argument_list: ($) =>
+      seq("(", sep(field("argument", $.expression), ","), ")"),
+
     _suite: ($) =>
       choice(
-        alias($.simple_statement, $.block),
+        alias($._simple_statement, $.block),
         seq($._indent, $.block),
         alias($._newline, $.block),
       ),

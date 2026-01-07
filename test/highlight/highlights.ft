@@ -63,10 +63,10 @@ false;
 // <- boolean
 
 none;
-// <- constant.builtin
+// <- constant
 
 _;
-// <- constant.builtin
+// <- constant
 
 if expr:
 // <- keyword

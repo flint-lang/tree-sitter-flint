@@ -7,7 +7,7 @@ use Core.time
 
 ---
 
-(flint_file
+(file
   (clause
     (use_clause
       (scoped_identifier

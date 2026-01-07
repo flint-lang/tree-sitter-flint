@@ -6,17 +6,15 @@ x = 3;
 y = "Hello";
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (identifier)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (identifier)
-        (string_literal)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (string_literal))))
 
 =================================================================================
 standalone array assignment expression
@@ -26,15 +24,14 @@ arr[4] = 19;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (array_access_expression
-          (identifier)
-          (array_rank_specifier
-            (decimal_integer_literal)))
-        (decimal_integer_literal)))))
+(file
+  (expression_statement
+    (assignment_expression
+      (array_access_expression
+        (identifier)
+        (array_rank_specifier
+          (integer_literal)))
+      (integer_literal))))
 
 =================================================================================
 standalone binary expression
@@ -58,82 +55,67 @@ a or b;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal)))))
+(file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (binary_expression
+      (integer_literal)
+      (integer_literal))))
 
 =================================================================================
 call expression
@@ -143,13 +125,12 @@ print("Hello, World!");
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (identifier)
-        (group_expression
-          (string_literal))))))
+(file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (argument_list
+        (string_literal)))))
 
 =================================================================================
 data access
@@ -159,12 +140,11 @@ dataobj.field;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (field_access
-        (identifier)
-        (identifier)))))
+(file
+  (expression_statement
+    (field_access
+      (identifier)
+      (identifier))))
 
 =================================================================================
 group expression
@@ -174,16 +154,15 @@ group expression
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (group_expression
-        (identifier)
-        (identifier)
-        (identifier)
-        (identifier)
-        (identifier)
-        (identifier)))))
+(file
+  (expression_statement
+    (group_expression
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier)
+      (type_identifier))))
 
 =================================================================================
 grouped data access
@@ -193,15 +172,14 @@ dataobj.(a, b, c);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (grouped_field_access
-        (identifier)
-        (group_expression
-          (identifier)
-          (identifier)
-          (identifier))))))
+(file
+  (expression_statement
+    (grouped_field_access
+      (identifier)
+      (group_expression
+        (type_identifier)
+        (type_identifier)
+        (type_identifier)))))
 
 =================================================================================
 initializer
@@ -211,13 +189,12 @@ obj(param);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (identifier)
-        (group_expression
-          (identifier))))))
+(file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (argument_list
+        (identifier)))))
 
 =================================================================================
 optional chain
@@ -227,14 +204,13 @@ opt?.print();
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (optional_chain
-          (identifier)
-          (identifier))
-        (group_expression)))))
+(file
+  (expression_statement
+    (call_expression
+      (optional_chain
+        (identifier)
+        (identifier))
+      (argument_list))))
 
 =================================================================================
 optional unwrap
@@ -244,13 +220,12 @@ opt!.identifier;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (field_access
-        (unwrap
-          (identifier))
-        (identifier)))))
+(file
+  (expression_statement
+    (field_access
+      (unwrap
+        (identifier))
+      (identifier))))
 
 =================================================================================
 range expression
@@ -263,25 +238,21 @@ x..y;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (range_expression
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (range_expression
-        (decimal_integer_literal)
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (range_expression
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (range_expression
-        (identifier)
-        (identifier)))))
+(file
+  (expression_statement
+    (range_expression
+      (integer_literal)))
+  (expression_statement
+    (range_expression
+      (integer_literal)
+      (integer_literal)))
+  (expression_statement
+    (range_expression
+      (integer_literal)))
+  (expression_statement
+    (range_expression
+      (identifier)
+      (identifier))))
 
 =================================================================================
 type cast
@@ -292,19 +263,17 @@ i32(4.3f);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (str_type)
-        (group_expression
-          (decimal_integer_literal)))))
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (integral_type)
-        (group_expression
-          (decimal_floating_point_literal))))))
+(file
+  (expression_statement
+    (call_expression
+      (str_type)
+      (argument_list
+        (integer_literal))))
+  (expression_statement
+    (call_expression
+      (integral_type)
+      (argument_list
+        (float_literal)))))
 
 =================================================================================
 variant extraction
@@ -315,19 +284,17 @@ expr?(custom);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (extraction
-        (identifier)
-        (group_expression
-          (str_type)))))
-  (simple_statement
-    (expression_statement
-      (extraction
-        (identifier)
-        (group_expression
-          (identifier))))))
+(file
+  (expression_statement
+    (extraction
+      (identifier)
+      (group_expression
+        (str_type))))
+  (expression_statement
+    (extraction
+      (identifier)
+      (group_expression
+        (identifier)))))
 
 =================================================================================
 variant unwrap
@@ -338,19 +305,17 @@ expr!(custom);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (unwrap
-        (identifier)
-        (group_expression
-          (str_type)))))
-  (simple_statement
-    (expression_statement
-      (unwrap
-        (identifier)
-        (group_expression
-          (identifier))))))
+(file
+  (expression_statement
+    (unwrap
+      (identifier)
+      (group_expression
+        (str_type))))
+  (expression_statement
+    (unwrap
+      (identifier)
+      (group_expression
+        (identifier)))))
 
 =================================================================================
 update expression
@@ -361,15 +326,13 @@ i++;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (update_expression
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (update_expression
-        (identifier)))))
+(file
+  (expression_statement
+    (update_expression
+      (identifier)))
+  (expression_statement
+    (update_expression
+      (identifier))))
 
 =================================================================================
 unary expression
@@ -381,19 +344,16 @@ not y;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (unary_expression
-        (decimal_integer_literal))))
-  (simple_statement
-    (expression_statement
-      (unary_expression
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (unary_expression
-        (identifier)))))
+(file
+  (expression_statement
+    (unary_expression
+      (integer_literal)))
+  (expression_statement
+    (unary_expression
+      (identifier)))
+  (expression_statement
+    (unary_expression
+      (identifier))))
 
 =================================================================================
 switch expression
@@ -406,23 +366,22 @@ switch e:
 
 ---
 
-(flint_file
-  (compound_statement
-    (switch_expression
-      (identifier)
-      (block
-        (switch_rule
-          (string_literal)
-          (expression_statement
-            (identifier)))
-        (switch_rule
-          (string_literal)
-          (expression_statement
-            (identifier)))
-        (switch_rule
-          (string_literal)
-          (expression_statement
-            (identifier)))))))
+(file
+  (switch_expression
+    (identifier)
+    (block
+      (switch_rule
+        (string_literal)
+        (expression_statement
+          (identifier)))
+      (switch_rule
+        (string_literal)
+        (expression_statement
+          (identifier)))
+      (switch_rule
+        (string_literal)
+        (expression_statement
+          (identifier))))))
 
 =================================================================================
 field access
@@ -433,19 +392,17 @@ x.y = 14;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
+(file
+  (expression_statement
+    (field_access
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (assignment_expression
       (field_access
         (identifier)
-        (identifier))))
-  (simple_statement
-    (expression_statement
-      (assignment_expression
-        (field_access
-          (identifier)
-          (identifier))
-        (decimal_integer_literal)))))
+        (identifier))
+      (integer_literal))))
 
 =================================================================================
 array access expression
@@ -455,13 +412,12 @@ arr[3];
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (array_access_expression
-        (identifier)
-        (array_rank_specifier
-          (decimal_integer_literal))))))
+(file
+  (expression_statement
+    (array_access_expression
+      (identifier)
+      (array_rank_specifier
+        (integer_literal)))))
 
 =================================================================================
 array creation expression
@@ -471,15 +427,14 @@ i32[10](0);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (decimal_integer_literal))
-        (group_expression
-          (decimal_integer_literal))))))
+(file
+  (expression_statement
+    (array_creation_expression
+      (integral_type)
+      (array_rank_specifier
+        (integer_literal))
+      (argument_list
+        (integer_literal)))))
 
 =================================================================================
 object creation expression
@@ -489,11 +444,10 @@ Point(3, 4);
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (call_expression
-        (identifier)
-        (group_expression
-          (decimal_integer_literal)
-          (decimal_integer_literal))))))
+(file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (argument_list
+        (integer_literal)
+        (integer_literal)))))

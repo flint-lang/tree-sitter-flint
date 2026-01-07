@@ -8,35 +8,26 @@ inferred := i32[10](0);
 
 ---
 
-(flint_file
-  (compound_statement
-    (variable_declaration
-      (typed_variable_declaration
+(file
+  (variable_declaration
+    (typed_variable_declarator
+      (integral_type)
+      (identifier)
+      (integer_literal)))
+  (variable_declaration
+    (typed_variable_declarator
+      (str_type)
+      (identifier)
+      (string_literal)))
+  (variable_declaration
+    (inferred_variable_declarator
+      (identifier)
+      (array_creation_expression
         (integral_type)
-        (variable_declarator_id
-          (identifier))
-        (decimal_integer_literal))))
-  (simple_statement)
-  (compound_statement
-    (variable_declaration
-      (typed_variable_declaration
-        (str_type)
-        (variable_declarator_id
-          (identifier))
-        (string_literal))))
-  (simple_statement)
-  (compound_statement
-    (variable_declaration
-      (inferred_variable_declaration
-        (variable_declarator_id
-          (identifier))
-        (array_creation_expression
-          (integral_type)
-          (array_rank_specifier
-            (decimal_integer_literal))
-          (group_expression
-            (decimal_integer_literal))))))
-  (simple_statement))
+        (array_rank_specifier
+          (integer_literal))
+        (argument_list
+          (integer_literal))))))
 
 =================================================================================
 group declaration
@@ -46,15 +37,13 @@ group declaration
 
 ---
 
-(flint_file
-  (compound_statement
-    (variable_declaration
-      (inferred_variable_declaration
-        (group_expression
-          (identifier)
-          (identifier))
-        (identifier))))
-  (simple_statement))
+(file
+  (variable_declaration
+    (inferred_variable_declarator
+      (group_expression
+        (type_identifier)
+        (type_identifier))
+      (identifier))))
 
 =================================================================================
 enum declaration
@@ -70,27 +59,25 @@ enum MyEnum:
 
 ---
 
-(flint_file
-  (compound_statement
-    (enum_declaration
-      (identifier)
-      (enum_body
-        (enum_constant
-          (identifier))
-        (enum_constant
-          (identifier))
-        (enum_constant
-          (identifier)))))
-  (compound_statement
-    (enum_declaration
-      (identifier)
-      (enum_body
-        (enum_constant
-          (identifier))
-        (enum_constant
-          (identifier))
-        (enum_constant
-          (identifier))))))
+(file
+  (enum_declaration
+    (identifier)
+    (enum_body
+      (enum_constant
+        (identifier))
+      (enum_constant
+        (identifier))
+      (enum_constant
+        (identifier))))
+  (enum_declaration
+    (identifier)
+    (enum_body
+      (enum_constant
+        (identifier))
+      (enum_constant
+        (identifier))
+      (enum_constant
+        (identifier)))))
 
 =================================================================================
 function declaration
@@ -104,30 +91,26 @@ def main() -> void:
 
 ---
 
-(flint_file
-  (compound_statement
-    (function_declaration
-      (identifier)
-      (parameters)
-      (block
-        (simple_statement
-          (expression_statement
-            (call_expression
-              (identifier)
-              (group_expression
-                (string_literal))))))))
-  (compound_statement
-    (function_declaration
-      (identifier)
-      (parameters)
-      (void_type)
-      (block
-        (simple_statement
-          (expression_statement
-            (call_expression
-              (identifier)
-              (group_expression
-                (string_literal)))))))))
+(file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (string_literal))))))
+  (function_declaration
+    (identifier)
+    (parameters)
+    (void_type)
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (string_literal)))))))
 
 =================================================================================
 test declaration
@@ -138,14 +121,12 @@ test "succeeds":
 
 ---
 
-(flint_file
-  (compound_statement
-    (test_declaration
-      (string_literal)
-      (block
-        (simple_statement
-          (expression_statement
-            (call_expression
-              (identifier)
-              (group_expression
-                (true)))))))))
+(file
+  (test_declaration
+    (string_literal)
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (true)))))))

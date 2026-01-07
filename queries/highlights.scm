@@ -22,8 +22,7 @@
 ;=============================
 
 (parameter
-  (variable_declarator_id
-    name: (identifier) @variable))
+    name: (identifier) @variable)
 
 ;=============================
 ; Operators
@@ -46,6 +45,8 @@
  "**"
  "??"
  ".."
+ ":="
+ "="
 ] @operator
 
 ;=============================
@@ -89,8 +90,8 @@
 (interpolated_string_literal) @string
 
 [
-  (decimal_integer_literal)
-  (decimal_floating_point_literal)
+  (integer_literal)
+  (float_literal)
 ] @number
 
 
@@ -99,7 +100,7 @@
   (false)
 ] @boolean
 
-[(none) (default_val)] @constant.builtin
+[(none) (default_val)] @constant
 
 ;=============================
 ; Keywords

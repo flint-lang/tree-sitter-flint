@@ -1,0 +1,8 @@
+i32[10](-2);
+// <- type
+// ^ punctuation.bracket
+//  ^ number
+
+arr := Point[4](Point(0, 0));
+// <- variable
+//      ^ type

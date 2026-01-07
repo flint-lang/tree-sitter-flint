@@ -8,16 +8,13 @@ decimal integer literals
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (decimal_integer_literal)))
-  (simple_statement
-    (expression_statement
-      (decimal_integer_literal)))
-  (simple_statement
-    (expression_statement
-      (decimal_integer_literal))))
+(file
+  (expression_statement
+    (integer_literal))
+  (expression_statement
+    (integer_literal))
+  (expression_statement
+    (integer_literal)))
 
 =================================================================================
 floating point literals
@@ -28,13 +25,11 @@ floating point literals
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (decimal_floating_point_literal)))
-  (simple_statement
-    (expression_statement
-      (decimal_floating_point_literal))))
+(file
+  (expression_statement
+    (float_literal))
+  (expression_statement
+    (float_literal)))
 
 =================================================================================
 boolean literals
@@ -45,13 +40,11 @@ false;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (true)))
-  (simple_statement
-    (expression_statement
-      (false))))
+(file
+  (expression_statement
+    (true))
+  (expression_statement
+    (false)))
 
 =================================================================================
 none literal
@@ -61,10 +54,9 @@ none;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (none))))
+(file
+  (expression_statement
+    (none)))
 
 =================================================================================
 default literal
@@ -74,10 +66,9 @@ _;
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (default_val))))
+(file
+  (expression_statement
+    (default_val)))
 
 =================================================================================
 character literals
@@ -91,22 +82,17 @@ character literals
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal))))
+(file
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal)))
 
 =================================================================================
 string literals
@@ -120,24 +106,19 @@ $"Actually {x} interpolated string";
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (string_literal
-        (escape_sequence))))
-  (simple_statement
-    (expression_statement
-      (string_literal)))
-  (simple_statement
-    (expression_statement
-      (interpolated_string_literal)))
-  (simple_statement
-    (expression_statement
-      (interpolated_string_literal)))
-  (simple_statement
-    (expression_statement
-      (string_literal
-        (escape_sequence)))))
+(file
+  (expression_statement
+    (string_literal
+      (escape_sequence)))
+  (expression_statement
+    (string_literal))
+  (expression_statement
+    (interpolated_string_literal))
+  (expression_statement
+    (interpolated_string_literal))
+  (expression_statement
+    (string_literal
+      (escape_sequence))))
 
 =================================================================================
 escape sequences
@@ -147,20 +128,19 @@ escape sequences
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (string_literal
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)
-        (escape_sequence)))))
+(file
+  (expression_statement
+    (string_literal
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence)
+      (escape_sequence))))
 
 =========================================
 char escapes
@@ -177,30 +157,22 @@ char escapes
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (character_literal)))
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (character_literal)
-        (character_literal)))))
+(file
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (character_literal))
+  (expression_statement
+    (binary_expression
+      (character_literal)
+      (character_literal))))

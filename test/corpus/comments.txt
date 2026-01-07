@@ -12,17 +12,16 @@ a /* dkjfhsdf + */ + b; /* ***** */
 
 ---
 
-(flint_file
+(file
   (line_comment)
   (block_comment)
   (block_comment)
   (block_comment)
-  (simple_statement
-    (expression_statement
-      (binary_expression
-        (identifier)
-        (block_comment)
-        (identifier))))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (block_comment)
+      (identifier)))
   (block_comment))
 
 =================================================================================
@@ -34,8 +33,7 @@ comments and literals
 
 ---
 
-(flint_file
-  (simple_statement
-    (expression_statement
-      (decimal_integer_literal)))
+(file
+  (expression_statement
+    (integer_literal))
   (line_comment))
