@@ -8,7 +8,7 @@
     "url": "git+https://github.com/flint-lang/tree-sitter-flint.git"
   },
   "funding": "",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "author": {
     "name": "Julius Grünberg",
     "email": "ghastcrafthd@troense.de",
