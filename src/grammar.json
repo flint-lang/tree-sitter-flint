@@ -349,7 +349,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_string_fragment"
+                "name": "string_fragment"
               },
               {
                 "type": "SYMBOL",
@@ -382,7 +382,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_string_fragment"
+                "name": "string_fragment"
               },
               {
                 "type": "SYMBOL",
@@ -397,33 +397,37 @@
         }
       ]
     },
-    "_string_fragment": {
+    "string_fragment": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PREC",
         "value": 1,
         "content": {
           "type": "PATTERN",
-          "value": "[^\"\\\\]+"
+          "value": "[^\"\\\\{}]+"
         }
       }
     },
     "string_interpolation": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "STRING",
-          "value": "}"
-        }
-      ]
+      "type": "FIELD",
+      "name": "interpolation",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "{"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "STRING",
+            "value": "}"
+          }
+        ]
+      }
     },
     "escape_sequence": {
       "type": "IMMEDIATE_TOKEN",
@@ -437,6 +441,10 @@
           {
             "type": "CHOICE",
             "members": [
+              {
+                "type": "PATTERN",
+                "value": "[\\{\\}]"
+              },
               {
                 "type": "PATTERN",
                 "value": "[^xu0-7]"
@@ -2787,6 +2795,10 @@
       "members": [
         {
           "type": "STRING",
+          "value": "bool8"
+        },
+        {
+          "type": "STRING",
           "value": "u8"
         },
         {
@@ -2869,6 +2881,10 @@
         {
           "type": "STRING",
           "value": "f32"
+        },
+        {
+          "type": "STRING",
+          "value": "f32x2"
         },
         {
           "type": "STRING",
@@ -3309,11 +3325,11 @@
     ],
     [
       "primary_expression",
-      "_simple_type"
+      "_unannotated_type"
     ],
     [
       "_variable_declarator_id",
-      "_simple_type"
+      "_unannotated_type"
     ],
     [
       "array_creation_expression",
@@ -3336,7 +3352,8 @@
     }
   ],
   "inline": [
-    "_name"
+    "_name",
+    "_simple_type"
   ],
   "supertypes": [
     "expression",

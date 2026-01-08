@@ -71,15 +71,15 @@ export default grammar({
     [$._compound_statement, $.expression],
     [$.primary_expression, $.scoped_identifier],
     [$.expression, $.call_expression],
-    [$.primary_expression, $._simple_type],
-    [$._variable_declarator_id, $._simple_type],
+    [$.primary_expression, $._unannotated_type],
+    [$._variable_declarator_id, $._unannotated_type],
     [$.array_creation_expression, $.array_type],
   ],
 
   // =================================================================
   // Inline
   // =================================================================
-  inline: ($) => [$._name],
+  inline: ($) => [$._name, $._simple_type],
 
   word: ($) => $.identifier,
 
@@ -133,23 +133,25 @@ export default grammar({
       seq(
         '$"',
         repeat(
-          choice($._string_fragment, $.string_interpolation, $.escape_sequence),
+          choice($.string_fragment, $.string_interpolation, $.escape_sequence),
         ),
         '"',
       ),
 
     string_literal: ($) =>
-      seq('"', repeat(choice($._string_fragment, $.escape_sequence)), '"'),
+      seq('"', repeat(choice($.string_fragment, $.escape_sequence)), '"'),
 
-    _string_fragment: (_) => token.immediate(prec(1, /[^"\\]+/)),
+    string_fragment: (_) => token.immediate(prec(1, /[^"\\{}]+/)),
 
-    string_interpolation: ($) => seq("{", $.expression, "}"),
+    string_interpolation: ($) =>
+      field("interpolation", seq("{", $.expression, "}")),
 
     escape_sequence: (_) =>
       token.immediate(
         seq(
           "\\",
           choice(
+            /[\{\}]/, // interpoolation
             /[^xu0-7]/,
             /[0-7]{1,3}/, // octal
             /x[0-9a-fA-F]{2}/, // hex
@@ -599,6 +601,7 @@ export default grammar({
 
     integral_type: ($) =>
       choice(
+        "bool8",
         "u8",
         "u32",
         "u32x2",
@@ -623,6 +626,7 @@ export default grammar({
     floating_point_type: ($) =>
       choice(
         "f32",
+        "f32x2",
         "f32x3",
         "f32x4",
         "f32x8",
