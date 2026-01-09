@@ -416,6 +416,7 @@ export default grammar({
         $.switch_expression,
         $.do_statement,
         $.while_statement,
+        $.for_statement,
         $.enhanced_for_statement,
         $.catch_statement,
       ),
@@ -456,6 +457,18 @@ export default grammar({
       seq(
         "while",
         field("condition", $.expression),
+        ":",
+        field("body", $._suite),
+      ),
+
+    for_statement: ($) =>
+      seq(
+        "for",
+        field("loopvar", $.variable_declaration),
+        ";",
+        field("condition", $.expression),
+        ";",
+        field("updater", $.expression),
         ":",
         field("body", $._suite),
       ),
