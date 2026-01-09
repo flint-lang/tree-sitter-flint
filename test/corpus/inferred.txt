@@ -1,0 +1,183 @@
+=========================================
+flintc inferred.ft
+=========================================
+use Core.assert
+
+/*
+ * This file contains all possibilities for inferred typing
+ */
+
+test "0. Inferred integer":
+	// '0' is of type 'int' (compile-time arbitrary precision integer)
+	// The compile-time arbitrary precision integer value has the
+	// default-type of 'i32'. So, 'i' has the type 'i32' here.
+	i := 0;
+	i--;
+	assert(i == -1);
+
+test "1. Inferred float":
+	// '3.13' is of type 'float' (compile-time arbitrary precision
+	// floating point number).
+	// The compile-time arbitrary precision float value has the
+	// default-type of 'f32'. So, 'f' has the type 'f32' here.
+	f := 3.14;
+	f--;
+	const f32 epsilon = 0.000001;
+	assert(f - 2.14 < epsilon);
+
+test "2. Inferred char":
+	// 'a' just has the type of 'u8'
+	c := 'a';
+	c -= 7;
+	assert(c == 'Z');
+
+test "3. Inferred string":
+	// The string is of type '__flint_type_str_lit' because it's a string literal
+	// But the string variable will be of type 'str'
+	string := "Hello, There!";
+	string += "\n";
+	assert(string == "Hello, There!\n");
+
+test "4. Inferred boolean 'true'":
+	boolean := true;
+	assert(boolean);
+
+#test_should_fail
+test "5. Inferred boolean 'false'":
+	boolean := false;
+	assert(boolean);
+
+---
+
+(file
+  (clause
+    (use_clause
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (block_comment)
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (line_comment)
+    (line_comment)
+    (line_comment)
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (integer_literal)))
+      (expression_statement
+        (update_expression
+          (identifier)))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (identifier)
+              (unary_expression
+                (integer_literal))))))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (line_comment)
+    (line_comment)
+    (line_comment)
+    (line_comment)
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (float_literal)))
+      (expression_statement
+        (update_expression
+          (identifier)))
+      (reserved)
+      (variable_declaration
+        (typed_variable_declarator
+          (floating_point_type)
+          (identifier)
+          (float_literal)))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (binary_expression
+                (identifier)
+                (float_literal))
+              (identifier)))))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (line_comment)
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (character_literal)))
+      (expression_statement
+        (assignment_expression
+          (identifier)
+          (integer_literal)))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (identifier)
+              (character_literal)))))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (line_comment)
+    (line_comment)
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (string_literal
+            (string_fragment))))
+      (expression_statement
+        (assignment_expression
+          (identifier)
+          (string_literal
+            (escape_sequence))))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (identifier)
+              (string_literal
+                (string_fragment)
+                (escape_sequence))))))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (true)))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (identifier))))))
+  (test_declaration
+    (annotation
+      (identifier))
+    (string_literal
+      (string_fragment))
+    (block
+      (variable_declaration
+        (inferred_variable_declarator
+          (identifier)
+          (false)))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (identifier)))))))

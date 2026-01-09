@@ -464,7 +464,7 @@ export default grammar({
     for_statement: ($) =>
       seq(
         "for",
-        field("loopvar", $.variable_declaration),
+        field("iteration", $.variable_declaration),
         ";",
         field("condition", $.expression),
         ";",
@@ -491,6 +491,12 @@ export default grammar({
         ":",
         field("body", $._suite),
       ),
+
+    // =================================================================
+    // Annotations
+    // =================================================================
+
+    annotation: ($) => seq("#", field("name", $._name)),
 
     // =================================================================
     // Declarations
@@ -555,6 +561,7 @@ export default grammar({
 
     test_declaration: ($) =>
       seq(
+        optional($.annotation),
         "test",
         field("name", $._string_literal),
         ":",
@@ -563,6 +570,7 @@ export default grammar({
 
     function_declaration: ($) =>
       seq(
+        optional($.annotation),
         "def",
         field("name", $.identifier),
         field("parameters", $.parameters),
