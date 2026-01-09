@@ -109,16 +109,25 @@ $"Actually {x} interpolated string";
 (file
   (expression_statement
     (string_literal
+      (string_fragment)
       (escape_sequence)))
   (expression_statement
-    (string_literal))
+    (string_literal
+      (string_fragment)))
   (expression_statement
-    (interpolated_string_literal))
+    (interpolated_string_literal
+      (string_fragment)))
   (expression_statement
-    (interpolated_string_literal))
+    (interpolated_string_literal
+      (string_fragment)
+      (string_interpolation
+        (identifier))
+      (string_fragment)))
   (expression_statement
     (string_literal
-      (escape_sequence))))
+      (string_fragment)
+      (escape_sequence)
+      (string_fragment))))
 
 =================================================================================
 escape sequences
@@ -135,8 +144,10 @@ escape sequences
       (escape_sequence)
       (escape_sequence)
       (escape_sequence)
+      (string_fragment)
       (escape_sequence)
       (escape_sequence)
+      (string_fragment)
       (escape_sequence)
       (escape_sequence)
       (escape_sequence)

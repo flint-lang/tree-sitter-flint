@@ -18,7 +18,8 @@ inferred := i32[10](0);
     (typed_variable_declarator
       (str_type)
       (identifier)
-      (string_literal)))
+      (string_literal
+        (string_fragment))))
   (variable_declaration
     (inferred_variable_declarator
       (identifier)
@@ -100,7 +101,8 @@ def main() -> void:
         (call_expression
           (identifier)
           (argument_list
-            (string_literal))))))
+            (string_literal
+              (string_fragment)))))))
   (function_declaration
     (identifier)
     (parameters)
@@ -110,7 +112,8 @@ def main() -> void:
         (call_expression
           (identifier)
           (argument_list
-            (string_literal)))))))
+            (string_literal
+              (string_fragment))))))))
 
 =================================================================================
 test declaration
@@ -123,7 +126,8 @@ test "succeeds":
 
 (file
   (test_declaration
-    (string_literal)
+    (string_literal
+      (string_fragment))
     (block
       (expression_statement
         (call_expression

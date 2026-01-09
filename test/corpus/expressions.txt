@@ -14,7 +14,8 @@ y = "Hello";
   (expression_statement
     (assignment_expression
       (identifier)
-      (string_literal))))
+      (string_literal
+        (string_fragment)))))
 
 =================================================================================
 standalone array assignment expression
@@ -130,7 +131,8 @@ print("Hello, World!");
     (call_expression
       (identifier)
       (argument_list
-        (string_literal)))))
+        (string_literal
+          (string_fragment))))))
 
 =================================================================================
 data access
@@ -371,15 +373,18 @@ switch e:
     (identifier)
     (block
       (switch_rule
-        (string_literal)
+        (string_literal
+          (string_fragment))
         (expression_statement
           (identifier)))
       (switch_rule
-        (string_literal)
+        (string_literal
+          (string_fragment))
         (expression_statement
           (identifier)))
       (switch_rule
-        (string_literal)
+        (string_literal
+          (string_fragment))
         (expression_statement
           (identifier))))))
 

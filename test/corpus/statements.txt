@@ -158,7 +158,13 @@ for i32 i, i32 idx in iterable:
         (call_expression
           (identifier)
           (argument_list
-            (interpolated_string_literal)))))))
+            (interpolated_string_literal
+              (string_fragment)
+              (string_interpolation
+                (identifier))
+              (string_fragment)
+              (string_interpolation
+                (identifier)))))))))
 
 =================================================================================
 group assignment
@@ -228,7 +234,8 @@ print("Hello, World");
     (call_expression
       (identifier)
       (argument_list
-        (string_literal)))))
+        (string_literal
+          (string_fragment))))))
 
 =================================================================================
 data field assignment
