@@ -61,10 +61,11 @@ export default grammar({
   // =================================================================
   // Externals
   // =================================================================
+
   externals: ($) => [$._newline, $._indent, $._dedent],
 
   // =================================================================
-  // Inline
+  // Conflicts
   // =================================================================
 
   conflicts: ($) => [
@@ -74,6 +75,8 @@ export default grammar({
     [$.primary_expression, $._unannotated_type],
     [$._variable_declarator_id, $._unannotated_type],
     [$.array_creation_expression, $.array_type],
+    [$._literal, $._variable_declarator_id],
+    [$.primary_expression, $._variable_declarator_id, $._unannotated_type],
   ],
 
   // =================================================================
@@ -464,11 +467,11 @@ export default grammar({
     for_statement: ($) =>
       seq(
         "for",
-        field("iteration", $.variable_declaration),
+        field("initialization", $.variable_declaration),
         ";",
         field("condition", $.expression),
         ";",
-        field("updater", $.expression),
+        field("post", $.expression),
         ":",
         field("body", $._suite),
       ),
@@ -476,11 +479,17 @@ export default grammar({
     enhanced_for_statement: ($) =>
       seq(
         "for",
-        sep1(choice($.typed_variable_declarator, $.default_val), ","),
+        field("initializer", $.enhanced_for_initializer),
         "in",
         field("value", $.expression),
         ":",
         field("body", $._suite),
+      ),
+
+    enhanced_for_initializer: ($) =>
+      choice(
+        $._variable_declarator_id,
+        seq("(", sep($._variable_declarator_id, ","), ")"),
       ),
 
     catch_statement: ($) =>

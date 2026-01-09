@@ -744,6 +744,26 @@
     }
   },
   {
+    "type": "enhanced_for_initializer",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "default_val",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "enhanced_for_statement",
     "named": true,
     "fields": {
@@ -753,6 +773,16 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "initializer": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "enhanced_for_initializer",
             "named": true
           }
         ]
@@ -767,20 +797,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "default_val",
-          "named": true
-        },
-        {
-          "type": "typed_variable_declarator",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -949,7 +965,7 @@
           }
         ]
       },
-      "iteration": {
+      "initialization": {
         "multiple": false,
         "required": true,
         "types": [
@@ -959,7 +975,7 @@
           }
         ]
       },
-      "updater": {
+      "post": {
         "multiple": false,
         "required": true,
         "types": [

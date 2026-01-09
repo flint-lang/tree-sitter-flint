@@ -1,0 +1,77 @@
+=================================================================================
+flintc functions.ft
+=================================================================================
+
+use Core.assert
+
+test "assert(true)":
+	assert(true);
+
+#test_should_fail
+test "assert(false)":
+	assert(false);
+
+#test_performance
+test "performance test":
+	u64 sum = 0;
+	for (i, _) in 0..100_000_000:
+		sum++;
+	assert(sum == 100_000_000);
+
+---
+
+(file
+  (clause
+    (use_clause
+      (scoped_identifier
+        (identifier)
+        (identifier))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (true))))))
+  (test_declaration
+    (annotation
+      (identifier))
+    (string_literal
+      (string_fragment))
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (false))))))
+  (test_declaration
+    (annotation
+      (identifier))
+    (string_literal
+      (string_fragment))
+    (block
+      (variable_declaration
+        (typed_variable_declarator
+          (integral_type)
+          (identifier)
+          (integer_literal)))
+      (enhanced_for_statement
+        (enhanced_for_initializer
+          (identifier)
+          (default_val))
+        (range_expression
+          (integer_literal)
+          (integer_literal))
+        (block
+          (expression_statement
+            (update_expression
+              (identifier)))))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (identifier)
+              (integer_literal))))))))
