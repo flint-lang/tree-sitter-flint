@@ -2803,6 +2803,22 @@
         },
         {
           "type": "STRING",
+          "value": "u8x2"
+        },
+        {
+          "type": "STRING",
+          "value": "u8x3"
+        },
+        {
+          "type": "STRING",
+          "value": "u8x4"
+        },
+        {
+          "type": "STRING",
+          "value": "u8x8"
+        },
+        {
+          "type": "STRING",
           "value": "u32"
         },
         {

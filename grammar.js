@@ -603,6 +603,10 @@ export default grammar({
       choice(
         "bool8",
         "u8",
+        "u8x2",
+        "u8x3",
+        "u8x4",
+        "u8x8",
         "u32",
         "u32x2",
         "u32x3",

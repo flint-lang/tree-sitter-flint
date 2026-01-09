@@ -2046,6 +2046,22 @@
     "named": false
   },
   {
+    "type": "u8x2",
+    "named": false
+  },
+  {
+    "type": "u8x3",
+    "named": false
+  },
+  {
+    "type": "u8x4",
+    "named": false
+  },
+  {
+    "type": "u8x8",
+    "named": false
+  },
+  {
     "type": "use",
     "named": false
   },
