@@ -113,32 +113,30 @@ while x:
 enhanced for statement
 =================================================================================
 
-for i32 i in iterable:
+for i in iterable:
     x;
 
-for i32 i, _ in iterable:
+for (i, _) in iterable:
     x;
     y;
 
-for i32 i, i32 idx in iterable:
+for (i, idx) in iterable:
     print($"i is {i} at index {idx}");
 
 ---
 
 (file
   (enhanced_for_statement
-    (typed_variable_declarator
-      (integral_type)
+    (enhanced_for_initializer
       (identifier))
     (identifier)
     (block
       (expression_statement
         (identifier))))
   (enhanced_for_statement
-    (typed_variable_declarator
-      (integral_type)
-      (identifier))
-    (default_val)
+    (enhanced_for_initializer
+      (identifier)
+      (default_val))
     (identifier)
     (block
       (expression_statement
@@ -146,11 +144,8 @@ for i32 i, i32 idx in iterable:
       (expression_statement
         (identifier))))
   (enhanced_for_statement
-    (typed_variable_declarator
-      (integral_type)
-      (identifier))
-    (typed_variable_declarator
-      (integral_type)
+    (enhanced_for_initializer
+      (identifier)
       (identifier))
     (identifier)
     (block
