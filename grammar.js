@@ -13,28 +13,25 @@ const DIGITS = token(
 const DECIMAL_DIGITS = token(sep1(/[0-9]+/, "_"));
 
 const PREC = {
-  COMMENT: 0,
-  ASSIGN: 1,
-  DECL: 2,
-  OR: 3,
-  AND: 4,
-  NOT: 5,
-  NOT_EQUAL: 6,
-  EQUALITY: 6,
-  GREATER_EQUAL: 6,
-  LESS_EQUAL: 6,
-  GREATER: 6,
-  LESS: 6,
-  PLUS: 7,
-  MINUS: 7,
-  MULT: 8,
-  DIV: 8,
-  POW: 9,
-  MOD: 9,
-  DEFAULT_OP: 10,
-  UNARY: 11,
-  ARRAY: 12,
-  FIELD_ACCESS: 13,
+  ASSIGN: 1, // =  += -=  *=  /=
+  DECL: 2, // declarations
+
+  OR: 8, // or
+  AND: 9, // and
+  EQUALITY: 10, // ==  !=
+  REL: 11, // <  <=  >  >=
+
+  // Math
+  ADD: 20, // +  -
+  MULT: 21, // *  /  %
+  POW: 22, // **
+  DEFAULT_OP: 29, // _
+
+  CALL: 30, // expr(args)
+  UNARY: 31, // ++a  --a  a++  a--  +  - not !
+  ARRAY: 32, // [idx]
+  FIELD_ACCESS: 32, // data.field
+  GROUPED_EXPR: 32, // (expr)
 };
 
 export default grammar({
