@@ -16,6 +16,7 @@ const PREC = {
   ASSIGN: 1, // =  += -=  *=  /=
   DECL: 2, // declarations
 
+  // Logic
   OR: 8, // or
   AND: 9, // and
   EQUALITY: 10, // ==  !=
@@ -30,7 +31,7 @@ const PREC = {
   CALL: 30, // expr(args)
   UNARY: 31, // ++a  --a  a++  a--  +  - not !
   ARRAY: 32, // [idx]
-  FIELD_ACCESS: 32, // data.field
+  MEMBER: 32, // data.field
   GROUPED_EXPR: 32, // (expr)
 };
 
@@ -48,10 +49,8 @@ export default grammar({
   supertypes: ($) => [
     $.expression,
     $.declaration,
-    $.primary_expression,
     $.statement,
     $._literal,
-    $._type,
     $._unannotated_type,
   ],
 
@@ -67,13 +66,10 @@ export default grammar({
 
   conflicts: ($) => [
     [$._compound_statement, $.expression],
-    [$.primary_expression, $.scoped_identifier],
     [$.expression, $.call_expression],
-    [$.primary_expression, $._unannotated_type],
     [$._variable_declarator_id, $._unannotated_type],
-    [$.array_creation_expression, $.array_type],
     [$._literal, $._variable_declarator_id],
-    [$.primary_expression, $._variable_declarator_id, $._unannotated_type],
+    [$.expression, $._unannotated_type],
   ],
 
   // =================================================================
@@ -167,11 +163,20 @@ export default grammar({
 
     expression: ($) =>
       choice(
+        $.identifier,
+        $._literal,
+        $.call_expression,
         $.assignment_expression,
         $.binary_expression,
         $.update_expression,
-        $.primary_expression,
+        $.member_expression,
+        $.subscript_expression,
         $.unary_expression,
+        $.switch_expression,
+        $.parenthesized_expression,
+        $.unwrap,
+        $.extraction,
+        $.range_expression,
         $.switch_expression,
       ),
 
@@ -179,16 +184,7 @@ export default grammar({
       prec.right(
         PREC.ASSIGN,
         seq(
-          field(
-            "left",
-            choice(
-              $.identifier,
-              $.field_access,
-              $.array_access_expression,
-              $.group_expression,
-              $.grouped_field_access,
-            ),
-          ),
+          field("left", choice($.expression)),
           field("operator", choice("=", "+=", "-=", "*=", "/=")),
           field("right", $.expression),
         ),
@@ -199,17 +195,17 @@ export default grammar({
         ...[
           ["or", PREC.OR],
           ["and", PREC.AND],
-          ["!=", PREC.NOT_EQUAL],
+          ["!=", PREC.EQUALITY],
           ["==", PREC.EQUALITY],
-          [">=", PREC.GREATER_EQUAL],
-          ["<=", PREC.LESS_EQUAL],
-          [">", PREC.GREATER],
-          ["<", PREC.LESS],
-          ["-", PREC.MINUS],
-          ["+", PREC.PLUS],
-          ["/", PREC.DIV],
+          [">=", PREC.REL],
+          ["<=", PREC.REL],
+          [">", PREC.REL],
+          ["<", PREC.REL],
+          ["-", PREC.ADD],
+          ["+", PREC.ADD],
+          ["/", PREC.MULT],
           ["*", PREC.MULT],
-          ["%", PREC.MOD],
+          ["%", PREC.MULT],
           ["**", PREC.POW],
           ["??", PREC.DEFAULT_OP],
         ].map(([operator, precedence]) =>
@@ -230,7 +226,7 @@ export default grammar({
         ...[
           ["+", PREC.UNARY],
           ["-", PREC.UNARY],
-          ["not", PREC.NOT],
+          ["not", PREC.UNARY],
         ].map(([operator, precedence]) =>
           prec.left(
             precedence,
@@ -244,7 +240,7 @@ export default grammar({
       ),
 
     update_expression: ($) =>
-      prec.left(
+      prec.right(
         PREC.UNARY,
         choice(
           seq($.expression, "++"),
@@ -254,92 +250,42 @@ export default grammar({
         ),
       ),
 
-    primary_expression: ($) =>
-      choice(
-        $._literal,
-        $.identifier,
-        $.field_access,
-        $.array_access_expression,
-        $.array_creation_expression,
-        $.call_expression,
-        $.group_expression,
-        $.grouped_field_access,
-        $.optional_chain,
-        $.unwrap,
-        $.extraction,
-        $.range_expression,
+    member_expression: ($) =>
+      prec(
+        PREC.MEMBER,
+        seq(
+          field("object", $.expression),
+          choice(".", "?."),
+          field("property", choice($.identifier, $.parenthesized_expression)),
+        ),
       ),
 
-    array_access_expression: ($) =>
+    subscript_expression: ($) =>
       prec(
         PREC.ARRAY,
-        seq(field("array", $._variable_declarator_id), $.array_rank_specifier),
-      ),
-
-    array_creation_expression: ($) =>
-      prec.right(
-        seq(
-          field("type", $._unannotated_type),
-          $.array_rank_specifier,
-          $.argument_list,
-        ),
-      ),
-
-    group_expression: ($) =>
-      seq(
-        "(",
-        sep(
-          field("group_member", choice($.expression, $._unannotated_type)),
-          ",",
-        ),
-        ")",
+        seq(field("object", $.expression), $.array_rank_specifier),
       ),
 
     call_expression: ($) =>
-      seq(
-        field("name", choice($.primary_expression, $._unannotated_type)),
-
-        field("arguments", $.argument_list),
-      ),
-
-    field_access: ($) =>
       prec(
-        PREC.FIELD_ACCESS,
+        PREC.CALL,
         seq(
-          field("object", $.primary_expression),
-          ".",
-          field("property", $.identifier),
+          field("name", choice($.expression)),
+          field("arguments", $.argument_list),
         ),
       ),
 
-    grouped_field_access: ($) =>
-      prec(
-        PREC.FIELD_ACCESS,
-        seq(
-          field("object", $.primary_expression),
-          ".",
-          field("group", $.group_expression),
-        ),
-      ),
-
-    optional_chain: ($) =>
-      prec(
-        PREC.FIELD_ACCESS,
-        seq(
-          field("optional", $.primary_expression),
-          "?.",
-          field("field", $.identifier),
-        ),
-      ),
+    parenthesized_expression: ($) =>
+      seq("(", sep1(choice($.expression, $._unannotated_type), ","), ")"),
 
     unwrap: ($) =>
-      prec.right(seq($.expression, "!", optional($.group_expression))),
+      prec.right(seq($.expression, "!", optional($.parenthesized_expression))),
 
-    extraction: ($) => seq($.expression, "?", $.group_expression),
+    extraction: ($) => seq($.expression, "?", $.parenthesized_expression),
 
     range_expression: ($) =>
       prec.right(
-        PREC.FIELD_ACCESS,
+        PREC.REL,
         seq(optional($.expression), "..", optional($.expression)),
       ),
 
@@ -493,7 +439,7 @@ export default grammar({
       seq(
         $.call_expression,
         "catch",
-        $.group_expression,
+        $.parenthesized_expression,
         ":",
         field("body", $._suite),
       ),
@@ -517,7 +463,6 @@ export default grammar({
           $.function_declaration,
           $.test_declaration,
         ),
-        // TODO: Add declarations
       ),
 
     enum_declaration: ($) =>
@@ -555,7 +500,7 @@ export default grammar({
 
     inferred_variable_declarator: ($) =>
       seq(
-        choice($._variable_declarator_id, $.group_expression),
+        choice($._variable_declarator_id, $.parenthesized_expression),
         ":=",
         field("value", $._variable_initializer),
       ),
@@ -598,13 +543,10 @@ export default grammar({
     // Types
     // =================================================================
 
-    _type: ($) =>
-      choice(
-        $._unannotated_type,
-        // TODO: add support for annotated types
-      ),
+    _type: ($) => choice($._unannotated_type, $._annotated_type),
 
     _unannotated_type: ($) => choice($._simple_type, $.array_type),
+    _annotated_type: ($) => seq($.annotation, $._unannotated_type),
 
     _simple_type: ($) =>
       choice(
@@ -614,7 +556,6 @@ export default grammar({
         prec(1, $.void_type),
         prec(1, $.str_type),
         alias($.identifier, $.type_identifier),
-        $.scoped_identifier,
       ),
 
     array_type: ($) =>
@@ -675,7 +616,7 @@ export default grammar({
     // Inline
     // =================================================================
 
-    _name: ($) => choice($.identifier, $.scoped_identifier),
+    _name: ($) => choice($.identifier),
 
     // =================================================================
     // Identifier
@@ -683,9 +624,6 @@ export default grammar({
 
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
     identifier: (_) => /[\p{XID_Start}_$][\p{XID_Continue}_$]*/u,
-
-    scoped_identifier: ($) =>
-      seq(field("scope", $._name), ".", field("name", $.identifier)),
 
     // =================================================================
     // Util
@@ -752,11 +690,10 @@ export default grammar({
     // Comments
     // =================================================================
 
-    line_comment: (_) => token(prec(PREC.COMMENT, seq("//", /[^\n]*/))),
+    line_comment: (_) => token(seq("//", /[^\n]*/)),
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-    block_comment: (_) =>
-      token(prec(PREC.COMMENT, seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+    block_comment: (_) => token(seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/")),
   },
 });
 
