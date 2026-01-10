@@ -701,7 +701,7 @@ export default grammar({
       choice(
         alias($._simple_statement, $.block),
         seq($._indent, $.block),
-        // alias($._newline, $.block), COMMENTED OUT SO AUTO INDENT MIGHT WORK
+        alias($._newline, $.block),
       ),
 
     dotted_name: ($) => prec(1, sep1($.identifier, ".")),
