@@ -28,7 +28,7 @@ arr[4] = 19;
 (file
   (expression_statement
     (assignment_expression
-      (array_access_expression
+      (subscript_expression
         (identifier)
         (array_rank_specifier
           (integer_literal)))
@@ -144,7 +144,7 @@ dataobj.field;
 
 (file
   (expression_statement
-    (field_access
+    (member_expression
       (identifier)
       (identifier))))
 
@@ -158,8 +158,8 @@ group expression
 
 (file
   (expression_statement
-    (group_expression
-      (type_identifier)
+    (parenthesized_expression
+      (identifier)
       (type_identifier)
       (type_identifier)
       (type_identifier)
@@ -176,10 +176,10 @@ dataobj.(a, b, c);
 
 (file
   (expression_statement
-    (grouped_field_access
+    (member_expression
       (identifier)
-      (group_expression
-        (type_identifier)
+      (parenthesized_expression
+        (identifier)
         (type_identifier)
         (type_identifier)))))
 
@@ -209,7 +209,7 @@ opt?.print();
 (file
   (expression_statement
     (call_expression
-      (optional_chain
+      (member_expression
         (identifier)
         (identifier))
       (argument_list))))
@@ -224,7 +224,7 @@ opt!.identifier;
 
 (file
   (expression_statement
-    (field_access
+    (member_expression
       (unwrap
         (identifier))
       (identifier))))
@@ -290,12 +290,12 @@ expr?(custom);
   (expression_statement
     (extraction
       (identifier)
-      (group_expression
+      (parenthesized_expression
         (str_type))))
   (expression_statement
     (extraction
       (identifier)
-      (group_expression
+      (parenthesized_expression
         (identifier)))))
 
 =================================================================================
@@ -311,12 +311,12 @@ expr!(custom);
   (expression_statement
     (unwrap
       (identifier)
-      (group_expression
+      (parenthesized_expression
         (str_type))))
   (expression_statement
     (unwrap
       (identifier)
-      (group_expression
+      (parenthesized_expression
         (identifier)))))
 
 =================================================================================
@@ -399,12 +399,12 @@ x.y = 14;
 
 (file
   (expression_statement
-    (field_access
+    (member_expression
       (identifier)
       (identifier)))
   (expression_statement
     (assignment_expression
-      (field_access
+      (member_expression
         (identifier)
         (identifier))
       (integer_literal))))
@@ -419,7 +419,7 @@ arr[3];
 
 (file
   (expression_statement
-    (array_access_expression
+    (subscript_expression
       (identifier)
       (array_rank_specifier
         (integer_literal)))))
@@ -434,10 +434,11 @@ i32[10](0);
 
 (file
   (expression_statement
-    (array_creation_expression
-      (integral_type)
-      (array_rank_specifier
-        (integer_literal))
+    (call_expression
+      (array_type
+        (integral_type)
+        (array_rank_specifier
+          (integer_literal)))
       (argument_list
         (integer_literal)))))
 

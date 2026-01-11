@@ -23,10 +23,11 @@ inferred := i32[10](0);
   (variable_declaration
     (inferred_variable_declarator
       (identifier)
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (integer_literal))
+      (call_expression
+        (array_type
+          (integral_type)
+          (array_rank_specifier
+            (integer_literal)))
         (argument_list
           (integer_literal))))))
 
@@ -41,8 +42,8 @@ group declaration
 (file
   (variable_declaration
     (inferred_variable_declarator
-      (group_expression
-        (type_identifier)
+      (parenthesized_expression
+        (identifier)
         (type_identifier))
       (identifier))))
 

@@ -78,7 +78,7 @@ test "10. Declare f64xN vectors":
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (block_comment)
@@ -113,14 +113,14 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
         (call_expression
           (identifier)
           (argument_list
-            (field_access
+            (member_expression
               (identifier)
               (identifier)))))
       (expression_statement
@@ -128,14 +128,14 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
         (call_expression
           (identifier)
           (argument_list
-            (field_access
+            (member_expression
               (identifier)
               (identifier)))))
       (expression_statement
@@ -143,7 +143,7 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
@@ -151,7 +151,7 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
@@ -159,7 +159,7 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
@@ -167,7 +167,7 @@ test "10. Declare f64xN vectors":
           (identifier)
           (argument_list
             (unary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))))))
       (expression_statement
@@ -254,13 +254,13 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (field_access
+          (member_expression
             (identifier)
             (identifier))))
       (expression_statement
         (assignment_expression
           (identifier)
-          (field_access
+          (member_expression
             (identifier)
             (identifier))))))
   (test_declaration
@@ -320,23 +320,14 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (integer_literal)
             (integer_literal))))
       (variable_declaration
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
-            (integer_literal)
-            (integer_literal)
-            (integer_literal))))
-      (variable_declaration
-        (typed_variable_declarator
-          (integral_type)
-          (identifier)
-          (group_expression
-            (integer_literal)
+          (parenthesized_expression
             (integer_literal)
             (integer_literal)
             (integer_literal))))
@@ -344,7 +335,16 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
+            (integer_literal)
+            (integer_literal)
+            (integer_literal)
+            (integer_literal))))
+      (variable_declaration
+        (typed_variable_declarator
+          (integral_type)
+          (identifier)
+          (parenthesized_expression
             (integer_literal)
             (integer_literal)
             (integer_literal)
@@ -361,14 +361,14 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (integer_literal)
             (integer_literal))))
       (variable_declaration
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (integer_literal)
             (integer_literal)
             (integer_literal))))
@@ -376,7 +376,7 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (integer_literal)
             (integer_literal)
             (integer_literal)
@@ -389,23 +389,14 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (float_literal)
             (float_literal))))
       (variable_declaration
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
-            (float_literal)
-            (float_literal)
-            (float_literal))))
-      (variable_declaration
-        (typed_variable_declarator
-          (floating_point_type)
-          (identifier)
-          (group_expression
-            (float_literal)
+          (parenthesized_expression
             (float_literal)
             (float_literal)
             (float_literal))))
@@ -413,7 +404,16 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
+            (float_literal)
+            (float_literal)
+            (float_literal)
+            (float_literal))))
+      (variable_declaration
+        (typed_variable_declarator
+          (floating_point_type)
+          (identifier)
+          (parenthesized_expression
             (float_literal)
             (float_literal)
             (float_literal)
@@ -430,14 +430,14 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (float_literal)
             (float_literal))))
       (variable_declaration
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (float_literal)
             (float_literal)
             (float_literal))))
@@ -445,7 +445,7 @@ test "10. Declare f64xN vectors":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (float_literal)
             (float_literal)
             (float_literal)

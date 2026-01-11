@@ -66,9 +66,6 @@ export default grammar({
 
   conflicts: ($) => [
     [$._compound_statement, $.expression],
-    [$.expression, $.call_expression],
-    [$._variable_declarator_id, $._unannotated_type],
-    [$._literal, $._variable_declarator_id],
     [$.expression, $._unannotated_type],
   ],
 
@@ -270,7 +267,7 @@ export default grammar({
       prec(
         PREC.CALL,
         seq(
-          field("name", choice($.expression)),
+          field("name", choice($.expression, $._unannotated_type)),
           field("arguments", $.argument_list),
         ),
       ),
@@ -325,7 +322,8 @@ export default grammar({
 
     clause: ($) => choice($.use_clause),
 
-    use_clause: ($) => seq("use", choice($._name, $._string_literal)),
+    use_clause: ($) =>
+      seq("use", choice($.member_expression, $._string_literal), $._newline),
 
     // =================================================================
     // Statements
@@ -420,19 +418,19 @@ export default grammar({
       ),
 
     enhanced_for_statement: ($) =>
-      seq(
-        "for",
-        field("initializer", $.enhanced_for_initializer),
-        "in",
-        field("value", $.expression),
-        ":",
-        field("body", $._suite),
-      ),
-
-    enhanced_for_initializer: ($) =>
-      choice(
-        $._variable_declarator_id,
-        seq("(", sep($._variable_declarator_id, ","), ")"),
+      prec(
+        1,
+        seq(
+          "for",
+          field(
+            "initializer",
+            choice($.expression, $.parenthesized_expression),
+          ),
+          "in",
+          field("value", $.expression),
+          ":",
+          field("body", $._suite),
+        ),
       ),
 
     catch_statement: ($) =>
@@ -493,7 +491,7 @@ export default grammar({
 
     typed_variable_declarator: ($) =>
       seq(
-        field("type", $._unannotated_type),
+        field("type", $._type),
         $._variable_declarator_id,
         optional(seq("=", field("value", $._variable_initializer))),
       ),

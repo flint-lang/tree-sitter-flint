@@ -269,7 +269,7 @@ test "41. Pow str":
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (test_declaration

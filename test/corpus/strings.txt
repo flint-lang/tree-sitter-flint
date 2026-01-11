@@ -188,7 +188,7 @@ test "37. String interpolate f64x4":
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (test_declaration
@@ -227,7 +227,7 @@ test "37. String interpolate f64x4":
           (identifier)
           (argument_list
             (binary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))
               (integer_literal)))))))
@@ -282,7 +282,7 @@ test "37. String interpolate f64x4":
           (identifier)
           (argument_list
             (binary_expression
-              (field_access
+              (member_expression
                 (identifier)
                 (identifier))
               (integer_literal)))))))
@@ -778,7 +778,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -807,40 +807,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
-            (unary_expression
-              (integer_literal))
-            (unary_expression
-              (integer_literal))
-            (unary_expression
-              (integer_literal)))))
-      (variable_declaration
-        (typed_variable_declarator
-          (str_type)
-          (identifier)
-          (interpolated_string_literal
-            (string_fragment)
-            (string_interpolation
-              (identifier)))))
-      (expression_statement
-        (call_expression
-          (identifier)
-          (argument_list
-            (binary_expression
-              (identifier)
-              (string_literal
-                (string_fragment))))))))
-  (test_declaration
-    (string_literal
-      (string_fragment))
-    (block
-      (variable_declaration
-        (typed_variable_declarator
-          (integral_type)
-          (identifier)
-          (group_expression
-            (unary_expression
-              (integer_literal))
+          (parenthesized_expression
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -871,15 +838,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
-            (unary_expression
-              (integer_literal))
-            (unary_expression
-              (integer_literal))
-            (unary_expression
-              (integer_literal))
-            (unary_expression
-              (integer_literal))
+          (parenthesized_expression
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -912,7 +871,19 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal))
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -941,7 +912,36 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
+            (unary_expression
+              (integer_literal))
+            (unary_expression
+              (integer_literal)))))
+      (variable_declaration
+        (typed_variable_declarator
+          (str_type)
+          (identifier)
+          (interpolated_string_literal
+            (string_fragment)
+            (string_interpolation
+              (identifier)))))
+      (expression_statement
+        (call_expression
+          (identifier)
+          (argument_list
+            (binary_expression
+              (identifier)
+              (string_literal
+                (string_fragment))))))))
+  (test_declaration
+    (string_literal
+      (string_fragment))
+    (block
+      (variable_declaration
+        (typed_variable_declarator
+          (integral_type)
+          (identifier)
+          (parenthesized_expression
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -972,7 +972,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (integral_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (integer_literal))
             (unary_expression
@@ -1005,7 +1005,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal))))
@@ -1033,7 +1033,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal)
@@ -1063,7 +1063,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal)
@@ -1094,7 +1094,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal)
@@ -1131,7 +1131,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal))))
@@ -1159,7 +1159,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal)
@@ -1189,7 +1189,7 @@ test "37. String interpolate f64x4":
         (typed_variable_declarator
           (floating_point_type)
           (identifier)
-          (group_expression
+          (parenthesized_expression
             (unary_expression
               (float_literal))
             (float_literal)

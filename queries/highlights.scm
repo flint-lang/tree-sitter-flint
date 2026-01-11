@@ -65,7 +65,7 @@
   name: (identifier) @constructor)
 (#match? @constructor "^[A-Z]"))
 
-((field_access
+((member_expression
   object: (identifier) @type)
 (#match? @type "^[A-Z]"))
 
@@ -168,7 +168,7 @@
 ; Fields
 ;=============================
 
-(field_access
+(member_expression
   property: (identifier) @property)
 
 ;=============================

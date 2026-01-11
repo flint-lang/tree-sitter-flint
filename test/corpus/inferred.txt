@@ -52,7 +52,7 @@ test "5. Inferred boolean 'false'":
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (block_comment)

@@ -11,27 +11,30 @@ Point[5](Point(0, 0));
 
 (file
   (expression_statement
-    (array_creation_expression
-      (integral_type)
-      (array_rank_specifier
-        (integer_literal))
+    (call_expression
+      (array_type
+        (integral_type)
+        (array_rank_specifier
+          (integer_literal)))
       (argument_list
         (unary_expression
           (integer_literal)))))
   (expression_statement
-    (array_creation_expression
-      (integral_type)
-      (array_rank_specifier
-        (integer_literal)
-        (integer_literal))
+    (call_expression
+      (array_type
+        (integral_type)
+        (array_rank_specifier
+          (integer_literal)
+          (integer_literal)))
       (argument_list
         (integer_literal)
         (integer_literal))))
   (expression_statement
-    (array_creation_expression
-      (type_identifier)
-      (array_rank_specifier
-        (integer_literal))
+    (call_expression
+      (subscript_expression
+        (identifier)
+        (array_rank_specifier
+          (integer_literal)))
       (argument_list
         (call_expression
           (identifier)
@@ -58,10 +61,11 @@ arr := i32[10, 10](0, 5);
         (integral_type)
         (array_rank_specifier))
       (identifier)
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (integer_literal))
+      (call_expression
+        (array_type
+          (integral_type)
+          (array_rank_specifier
+            (integer_literal)))
         (argument_list
           (unary_expression
             (integer_literal))))))
@@ -71,32 +75,35 @@ arr := i32[10, 10](0, 5);
         (integral_type)
         (array_rank_specifier))
       (identifier)
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (integer_literal)
-          (integer_literal))
+      (call_expression
+        (array_type
+          (integral_type)
+          (array_rank_specifier
+            (integer_literal)
+            (integer_literal)))
         (argument_list
           (integer_literal)
           (integer_literal)))))
   (variable_declaration
     (inferred_variable_declarator
       (identifier)
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (integer_literal))
+      (call_expression
+        (array_type
+          (integral_type)
+          (array_rank_specifier
+            (integer_literal)))
         (argument_list
           (unary_expression
             (integer_literal))))))
   (variable_declaration
     (inferred_variable_declarator
       (identifier)
-      (array_creation_expression
-        (integral_type)
-        (array_rank_specifier
-          (integer_literal)
-          (integer_literal))
+      (call_expression
+        (array_type
+          (integral_type)
+          (array_rank_specifier
+            (integer_literal)
+            (integer_literal)))
         (argument_list
           (integer_literal)
           (integer_literal))))))

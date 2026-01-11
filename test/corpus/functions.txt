@@ -23,7 +23,7 @@ test "performance test":
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (test_declaration
@@ -58,7 +58,7 @@ test "performance test":
           (identifier)
           (integer_literal)))
       (enhanced_for_statement
-        (enhanced_for_initializer
+        (parenthesized_expression
           (identifier)
           (default_val))
         (range_expression

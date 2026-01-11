@@ -10,11 +10,11 @@ use Core.time
 (file
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier))))
   (clause
     (use_clause
-      (scoped_identifier
+      (member_expression
         (identifier)
         (identifier)))))

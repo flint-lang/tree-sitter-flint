@@ -19,7 +19,7 @@ arr[3];
 
 (file
   (expression_statement
-    (array_access_expression
+    (subscript_expression
       (identifier)
       (array_rank_specifier
         (integer_literal)))))
@@ -127,14 +127,13 @@ for (i, idx) in iterable:
 
 (file
   (enhanced_for_statement
-    (enhanced_for_initializer
-      (identifier))
+    (identifier)
     (identifier)
     (block
       (expression_statement
         (identifier))))
   (enhanced_for_statement
-    (enhanced_for_initializer
+    (parenthesized_expression
       (identifier)
       (default_val))
     (identifier)
@@ -144,9 +143,9 @@ for (i, idx) in iterable:
       (expression_statement
         (identifier))))
   (enhanced_for_statement
-    (enhanced_for_initializer
+    (parenthesized_expression
       (identifier)
-      (identifier))
+      (type_identifier))
     (identifier)
     (block
       (expression_statement
@@ -172,8 +171,8 @@ group assignment
 (file
   (expression_statement
     (assignment_expression
-      (group_expression
-        (type_identifier)
+      (parenthesized_expression
+        (identifier)
         (type_identifier))
       (identifier))))
 
@@ -189,11 +188,11 @@ fn.call() catch(e):
 (file
   (catch_statement
     (call_expression
-      (field_access
+      (member_expression
         (identifier)
         (identifier))
       (argument_list))
-    (group_expression
+    (parenthesized_expression
       (identifier))
     (block
       (expression_statement
@@ -210,7 +209,7 @@ arr[expr] = expr;
 (file
   (expression_statement
     (assignment_expression
-      (array_access_expression
+      (subscript_expression
         (identifier)
         (array_rank_specifier
           (identifier)))
@@ -243,7 +242,7 @@ x.y = z;
 (file
   (expression_statement
     (assignment_expression
-      (field_access
+      (member_expression
         (identifier)
         (identifier))
       (identifier))))
@@ -259,10 +258,10 @@ a.(b, c) = expr;
 (file
   (expression_statement
     (assignment_expression
-      (grouped_field_access
+      (member_expression
         (identifier)
-        (group_expression
-          (type_identifier)
+        (parenthesized_expression
+          (identifier)
           (type_identifier)))
       (identifier))))
 
@@ -289,7 +288,7 @@ expr[2, 2] = 4;
 (file
   (expression_statement
     (assignment_expression
-      (array_access_expression
+      (subscript_expression
         (identifier)
         (array_rank_specifier
           (integer_literal)
@@ -307,10 +306,10 @@ a.(b, c) = d;
 (file
   (expression_statement
     (assignment_expression
-      (grouped_field_access
+      (member_expression
         (identifier)
-        (group_expression
-          (type_identifier)
+        (parenthesized_expression
+          (identifier)
           (type_identifier)))
       (identifier))))
 
